@@ -1,3 +1,72 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect
+from .models import *
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login, logout 
 # Create your views here.
+
+
+
+def signup(request):    
+    if request.user.is_authenticated:
+        messages.warning(request, "Already Logged in")
+        return redirect('index')
+        return redirect('home')
+    else:   
+        if request.method == 'GET':
+            return redirect('index')
+        if request.method == 'POST':
+            email = request.POST.get('email')
+            if not email:
+                messages.warning(request, "Email required")
+                return redirect('index')
+            if User.objects.filter(email=email):
+                messages.warning(request, "User already exists with this email")
+                return redirect('index')
+
+
+            
+            User.objects.create(
+                password = make_password(request.POST.get('password')),
+                username= request.POST.get('email'),
+                first_name = request.POST.get('name'),
+                email=request.POST.get('email')
+            )
+
+            # messages.success(request, "Please verify your email to continue")
+            messages.success(request, "Login to continue")
+            return redirect('index')            
+            return redirect('users:Signup')
+        
+
+def signin(request):
+    next_url =  request.POST.get('next')
+    
+    if request.user.is_authenticated:
+        messages.warning(request, "Already Logged in")
+        return redirect('index')
+    else:
+        if request.method == 'GET':
+            return redirect('index')
+            
+        if request.method == 'POST':
+            if User.objects.filter(email=request.POST.get('email')):
+                user = authenticate(
+                        request, 
+                        username=request.POST.get('email'), 
+                        password=request.POST.get('password')
+                    )
+                if user:
+                    login(request, user)    
+                    messages.success(request, "Login success")
+                    if next_url:
+                        return redirect(next_url)
+                    else:
+                        return redirect('index')
+                else:
+                    messages.error(request, "Incorrect password!!!")
+                return redirect('index')       
+            else:
+                messages.warning(request, "Email not registered")      
+                return render(request,'index')
+ 
