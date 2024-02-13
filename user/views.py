@@ -11,8 +11,8 @@ def signup(request):
     if request.user.is_authenticated:
         messages.warning(request, "Already Logged in")
         return redirect('index')
-        return redirect('home')
-    else:   
+        # return render('home/home.html')
+    else:
         if request.method == 'GET':
             return redirect('index')
         if request.method == 'POST':
@@ -68,5 +68,17 @@ def signin(request):
                 return redirect('index')       
             else:
                 messages.warning(request, "Email not registered")      
-                return render(request,'index')
- 
+                return redirect('index')       
+                # return render(request,'index')
+
+
+
+def check_login(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    return render(request,'home/index.html')
+
+def home(request):
+    if request.user.is_authenticated:
+        return render(request,'home/home.html')
+    return redirect('index')   
