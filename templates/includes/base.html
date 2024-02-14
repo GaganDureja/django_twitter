@@ -53,324 +53,159 @@
 	
 
 	<div id="page">
-	
-		<header class="version_1">
-			<div class="layer"></div><!-- Mobile menu overlay mask -->
-			<div class="main_header">
-				<div class="container">
-					<div class="row small-gutters">
-						<div class="col-xl-3 col-lg-3 d-lg-flex align-items-center">
-							<div id="logo">
-								<a href="#"><img src="{% static 'img/logo.svg' %}" alt="" width="100" height="35"></a>
-							</div>
-						</div>
-						<nav class="col-xl-6 col-lg-7">
-							<a class="open_close" href="javascript:void(0);">
-								<div class="hamburger hamburger--spin">
-									<div class="hamburger-box">
-										<div class="hamburger-inner"></div>
-									</div>
-								</div>
-							</a>
-							<!-- Mobile menu button -->
-							<div class="main-menu">
-								<div id="header_menu">
-									<a href="#"><img src="{% static 'img/logo_black.svg' %}" alt="" width="100" height="35"></a>
-									<a href="#" class="open_close" id="close_in"><i class="ti-close"></i></a>
-								</div>
-								<ul>
-									<li><a href="#" >Home</a></li>
-									<li class="megamenu submenu">
-										<a href="javascript:void(0);" class="show-submenu-mega">Category</a>
-										<div class="menu-wrapper">
-											<div class="row small-gutters">
-	
-												{% for link in categories_with_subcategories %}
-	
-													{% if link.subcategories %}
-	
-													<div class="col-lg-3">
-														<a href="#"><h3>{{ link.category }}</h3></a>
-														<ul>
-															{% for subcat in link.subcategories  %}
-															<li><a href="#">{{ subcat }}</a></li>
-															{% endfor %}
-														</ul>
-													</div>
-	
-													{% endif %}
-	
-												{% endfor %}
-												
-												
-											</div>
-											<!-- /row -->
-										</div>
-										<!-- /menu-wrapper -->
-									</li>
-									<li class="submenu">
-										<a href="javascript:void(0);" class="show-submenu">More</a>
-										<ul>
-											<li><a href="#">About</a></li>
-											<li><a href="#">Help & FAQ</a></li>
-											<li><a href="#">Contact us</a></li>
-										</ul>
-									</li>
-									<li>
-										<a href="#">Blog</a>
-									</li>
-									
-								</ul>
-							</div>
-							<!--/main-menu -->
-						</nav>
-						<div class="col-xl-3 col-lg-2 d-lg-flex align-items-center justify-content-end text-end">
-							<a class="phone_top" href="tel://917897897899"><strong><span>Need Help?</span>+91 789-789-7899</strong></a>
-						</div>
-					</div>
-					<!-- /row -->
-				</div>
-			</div>
-			<!-- /main_header -->
-	
-			<div class="main_nav inner">
-				<div class="container">
-					<div class="row small-gutters">
-						<div class="col-xl-3 col-lg-3 col-md-3">
-							<nav class="categories">
-								<ul class="clearfix">
-									<li><span>
-											<a href="#">
-												<span class="hamburger hamburger--spin">
-													<span class="hamburger-box">
-														<span class="hamburger-inner"></span>
-													</span>
-												</span>
-												Categories
-											</a>
-										</span>
-										<!-- {{ all_links }} -->
-										<div id="menu">
-											<ul>
-												
-												{% for link in categories_with_subcategories %}
-													<li><span><a href="#">{{ link.category.name }}</a></span>
-														{% if link.subcategories %}
-														<ul>
-														{% for subcat in link.subcategories  %}
-															<li><a href="#">{{ subcat.name }}</a></li>
-														{% endfor %}
-														</ul>
-														{% endif %}
-													</li>												
-													
-												{% endfor %}
-												
-												 
-											</ul>
-										</div>
-									</li>
-								</ul>
-							</nav>
-						</div>
-						<div class="col-xl-6 col-lg-7 col-md-6 d-none d-md-block">
-							<div class="custom-search-input">
-								<input type="text" placeholder="Search over 10.000 products">
-								<button type="submit"><i class="header-icon_search_custom"></i></button>
-							</div>
-						</div>
-						<div class="col-xl-3 col-lg-2 col-md-3">
-							<ul class="top_tools">
-								<li>
-									<div class="dropdown dropdown-cart">
-										<a href="#" class="cart_bt"><strong>{{total_cart_items}}</strong></a>
-										{% if user.is_authenticated %}
-										<div class="dropdown-menu">
-											<ul>
-												{% for cart_item in cart_items_top %}
-												<li>
-													<a href="#">
-														{% for image in cart_item.product.product_images.all|slice:":1" %}
-														<figure><img src="{{image.img.url}}" data-src="{{image.img.url}}" alt="" width="50" height="50" class="lazy"></figure>
-														{% endfor %}
-														<strong><span>{{cart_item.quantity}} x {{cart_item.product}}</span>{% widthratio cart_item.product.price 1 cart_item.quantity  %}</strong>
-													</a>
-													<a href="#" class="action"><i class="ti-trash"></i></a>
-												</li>
-												{% endfor %}
-												 
-											</ul>
-											<div class="total_drop">
-												<div class="clearfix"><strong>Total</strong><span> ₹ {{cart_total_price}}</span></div>
-												<a href="#" class="btn_1 outline">View Cart</a>
-												<a href="#" class="btn_1">Checkout</a>
-											</div>
-										</div>
-										{% endif %}
-									</div>
-									<!-- /dropdown-cart-->
-								</li>
-								<li>
-									<a href="#0" class="wishlist"><span>Wishlist</span></a>
-								</li>
-								<li>
-									<div class="dropdown dropdown-access">
-										<a href="javascript:void(0)" class="access_link"><span>Account</span></a>
-										<div class="dropdown-menu">
-											{% if not user.is_authenticated %}
-											<a href="#" class="btn_1">Sign In or Sign Up</a>
-											{% else %}
-											<a href="#" class="btn_1">{{ user.first_name }}</a>
-											<ul>												
-												<li>
-													<a href="#"><i class="ti-package"></i>My Orders</a>
-												</li>
-												<li>
-													<a href="#"><i class="ti-user"></i>My Profile</a>
-												</li>
-												<li>
-													<a href="#"><i class="ti-help-alt"></i>Help and Faq</a>
-												</li>
-												<li>
-													<a href="#"><i class="ti-user"></i>Logout</a>
-												</li>
-											</ul>
-											{% endif %}
-										</div>
-									</div>
-									<!-- /dropdown-access-->
-								</li>
-								<li>
-									<a href="javascript:void(0);" class="btn_search_mob"><span>Search</span></a>
-								</li>
-								<li>
-									<a href="#menu" class="btn_cat_mob">
-										<div class="hamburger hamburger--spin" id="hamburger">
-											<div class="hamburger-box">
-												<div class="hamburger-inner"></div>
-											</div>
-										</div>
-										Categories
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<!-- /row -->
-				</div>
-				<div class="search_mob_wp">
-					<input type="text" class="form-control" placeholder="Search over 10.000 products">
-					<input type="submit" class="btn_1 full-width" value="Search">
-				</div>
-				<!-- /search_mobile -->
-			</div>
-			<!-- /main_nav -->
-		</header>
-		<!-- /header -->
-
-			{% block main_content %}
-				
-			{% endblock %}
-
-
-
-
-
-
-
-
-		<footer>
-			<div class="container">
+		<main class="bg_gray">
+			<div class="container margin_30">
 				<div class="row">
-					<div class="col-lg-3 col-md-6">
-						<h3 data-bs-target="#collapse_1">Quick Links</h3>
-						<div class="collapse dont-collapse-sm links" id="collapse_1">
-							<ul>
-								<li><a href="#">About us</a></li>
-								<li><a href="#">Help & Faq</a></li>
-								<li><a href="#">Blog</a></li>
-								<li><a href="#">Contact us</a></li>
+					<div class="col-lg-2">
+						<nav class="categories">
+							<ul class="clearfix">
+								<li><span>
+										<a href="#">
+											<span class="hamburger hamburger--spin">
+												<span class="hamburger-box">
+													<span class="hamburger-inner"></span>
+												</span>
+											</span>
+											Categories
+										</a>
+									</span>
+									<div id="menu">
+										<ul>
+											<li><span><a href="#0">Collections</a></span>
+												<ul>
+													<li><a href="listing-grid-1-full.html">Trending</a></li>
+													<li><a href="listing-grid-2-full.html">Life style</a></li>
+													<li><a href="listing-grid-3.html">Running</a></li>
+													<li><a href="listing-grid-4-sidebar-left.html">Training</a></li>
+													<li><a href="listing-grid-5-sidebar-right.html">View all Collections</a></li>
+												</ul>
+											</li>
+											<li><span><a href="#">Men</a></span>
+												<ul>
+													<li><a href="listing-grid-6-sidebar-left.html">Offers</a></li>
+													<li><a href="listing-grid-7-sidebar-right.html">Shoes</a></li>
+													<li><a href="listing-row-1-sidebar-left.html">Clothing</a></li>
+													<li><a href="listing-row-3-sidebar-left.html">Accessories</a></li>
+													<li><a href="listing-row-4-sidebar-extended.html">Equipment</a></li>
+												</ul>
+											</li>
+											<li><span><a href="#">Women</a></span>
+												<ul>
+													<li><a href="listing-grid-1-full.html">Best Sellers</a></li>
+													<li><a href="listing-grid-2-full.html">Clothing</a></li>
+													<li><a href="listing-grid-3.html">Accessories</a></li>
+													<li><a href="listing-grid-4-sidebar-left.html">Shoes</a></li>
+												</ul>
+											</li>
+											<li><span><a href="#">Boys</a></span>
+												<ul>
+													<li><a href="listing-grid-6-sidebar-left.html">Easy On Shoes</a></li>
+													<li><a href="listing-grid-7-sidebar-right.html">Clothing</a></li>
+													<li><a href="listing-row-3-sidebar-left.html">Must Have</a></li>
+													<li><a href="listing-row-4-sidebar-extended.html">All Boys</a></li>
+												</ul>
+											</li>
+											<li><span><a href="#">Girls</a></span>
+												<ul>
+													<li><a href="listing-grid-1-full.html">New Releases</a></li>
+													<li><a href="listing-grid-2-full.html">Clothing</a></li>
+													<li><a href="listing-grid-3.html">Sale</a></li>
+													<li><a href="listing-grid-4-sidebar-left.html">Best Sellers</a></li>
+												</ul>
+											</li>
+											<li><span><a href="#">Customize</a></span>
+												<ul>
+													<li><a href="listing-row-1-sidebar-left.html">For Men</a></li>
+													<li><a href="listing-row-2-sidebar-right.html">For Women</a></li>
+													<li><a href="listing-row-4-sidebar-extended.html">For Boys</a></li>
+													<li><a href="listing-grid-1-full.html">For Girls</a></li>
+												</ul>
+											</li>
+										</ul>
+									</div>
+								</li>
 							</ul>
-						</div>
+						</nav>
 					</div>
-					<div class="col-lg-3 col-md-6">
-						<h3 data-bs-target="#collapse_2">Categories</h3>
-						<div class="collapse dont-collapse-sm links" id="collapse_2">
-							<ul>
-								{% for link in categories_with_subcategories|slice:"6" %}
-								<li><a href="#">{{ link.category }}</a></li>
-								{% endfor %}
-							</ul>
-						</div>
+					<div class="col-lg-7">
+						{% block main_content %}
+							
+						{% endblock %}
 					</div>
-					<div class="col-lg-3 col-md-6">
-							<h3 data-bs-target="#collapse_3">Contact us</h3>
-						<div class="collapse dont-collapse-sm contacts" id="collapse_3">
-							<ul>
-								<li><i class="ti-home"></i>97845 Baker st. 567<br>Los Angeles - US</li>
-								<li><i class="ti-headphone-alt"></i><a href="tel:917897897899">+91 789-789-7899</a></li>
-								<li><i class="ti-email"></i><a href="mail:info@ecom.com">info@ecom.com</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-lg-3 col-md-6">
-							<h3 data-bs-target="#collapse_4">Keep in touch</h3>
-						<div class="collapse dont-collapse-sm" id="collapse_4">
-							<div id="newsletter">
-								<div class="form-group">
-									<input type="email" name="email_newsletter" id="email_newsletter" class="form-control" placeholder="Your email">
-									<button type="submit" id="submit-newsletter"><i class="ti-angle-double-right"></i></button>
-								</div>
+				
+
+					<aside class="col-lg-3">
+						<div class="widget search_blog d-none d-sm-none d-md-none d-lg-block">
+							<div class="form-group">
+								<input type="text" name="search" id="search_blog" class="form-control" placeholder="Search..">
+								<button type="submit"><i class="ti-search"></i></button>
 							</div>
-							<div class="follow_us">
-								<h5>Follow Us</h5>
-								<ul>
-									<li><a href="#"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="{% static 'img/twitter_icon.svg' %}" alt="" class="lazy"></a></li>
-									<li><a href="#"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="{% static 'img/facebook_icon.svg' %}" alt="" class="lazy"></a></li>
-									<li><a href="#"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="{% static 'img/instagram_icon.svg' %}" alt="" class="lazy"></a></li>
-									<li><a href="#"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="{% static 'img/youtube_icon.svg' %}" alt="" class="lazy"></a></li>
-								</ul>
+						</div>
+						<!-- /widget -->
+						<div class="widget">
+							<div class="widget-title">
+								<h4>Latest Post</h4>
+							</div>
+							<ul class="comments-list">
+								<li>
+									<div class="alignleft">
+										<a href="#0"><img src="img/blog-5.jpg" alt=""></a>
+									</div>
+									<small>Category - 11.08.2016</small>
+									<h3><a href="#" title="">Verear qualisque ex minimum...</a></h3>
+								</li>
+								<li>
+									<div class="alignleft">
+										<a href="#0"><img src="img/blog-6.jpg" alt=""></a>
+									</div>
+									<small>Category - 11.08.2016</small>
+									<h3><a href="#" title="">Verear qualisque ex minimum...</a></h3>
+								</li>
+								<li>
+									<div class="alignleft">
+										<a href="#0"><img src="img/blog-4.jpg" alt=""></a>
+									</div>
+									<small>Category - 11.08.2016</small>
+									<h3><a href="#" title="">Verear qualisque ex minimum...</a></h3>
+								</li>
+							</ul>
+						</div>
+						<!-- /widget -->
+						<div class="widget">
+							<div class="widget-title">
+								<h4>Categories</h4>
+							</div>
+							<ul class="cats">
+								<li><a href="#">Food <span>(12)</span></a></li>
+								<li><a href="#">Places to visit <span>(21)</span></a></li>
+								<li><a href="#">New Places <span>(44)</span></a></li>
+								<li><a href="#">Suggestions and guides <span>(31)</span></a></li>
+							</ul>
+						</div>
+						<!-- /widget -->
+						<div class="widget">
+							<div class="widget-title">
+								<h4>Popular Tags</h4>
+							</div>
+							<div class="tags">
+								<a href="#">Food</a>
+								<a href="#">Bars</a>
+								<a href="#">Cooktails</a>
+								<a href="#">Shops</a>
+								<a href="#">Best Offers</a>
+								<a href="#">Transports</a>
+								<a href="#">Restaurants</a>
 							</div>
 						</div>
-					</div>
+						<!-- /widget -->
+					</aside>
+					<!-- /aside -->
 				</div>
-				<!-- /row-->
-				<hr>
-				<div class="row add_bottom_25">
-					<div class="col-lg-6">
-						<ul class="footer-selector clearfix">
-							<li>
-								<div class="styled-select lang-selector">
-									<select>
-										<option value="English" selected>English</option>
-										<option value="French">French</option>
-										<option value="Spanish">Spanish</option>
-										<option value="Russian">Russian</option>
-									</select>
-								</div>
-							</li>
-							<li>
-								<div class="styled-select currency-selector">
-									<select>
-										<option value="US Dollars" selected>US Dollars</option>
-										<option value="Euro">Euro</option>
-									</select>
-								</div>
-							</li>
-							<li><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="{% static 'img/cards_all.svg' %}" alt="" width="198" height="30" class="lazy"></li>
-						</ul>
-					</div>
-					<div class="col-lg-6">
-						<ul class="additional_links">
-							<li><a href="#">Terms and conditions</a></li>
-							<li><a href="#">Privacy</a></li>
-							<li><span>© 2024 Ecom</span></li>
-						</ul>
-					</div>
-				</div>
+			<!-- /row -->
 			</div>
-		</footer>
-		<!--/footer-->
+			<!-- /container -->
+		</main>
+		<!--/main-->		 
 	</div>
 	<!-- page -->
 	
