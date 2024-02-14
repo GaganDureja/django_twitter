@@ -131,6 +131,17 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
+
+# Medis files (CSS, JavaScript, Images)
+import os
+
+# Define the absolute filesystem path to the directory that will hold user-uploaded files.
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# URL that handles the media served from MEDIA_ROOT, used for managing stored files.
+MEDIA_URL = '/media/'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

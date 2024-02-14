@@ -12,6 +12,9 @@ class User(AbstractUser):
     verified_account = models.BooleanField(default=False)
 
 
+class T_Media(models.Model):
+    file_name = models.FileField(upload_to="tweets")
+
 class Tweet(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     msg = models.CharField(max_length=500, null=True)
@@ -22,3 +25,36 @@ class Tweet(models.Model):
         (2, 'Poll')
     )
     tweet_type = models.IntegerField(default=0, choices=TWEET_TYPES)
+
+    REPLY_TYPES = (
+        (0,'Everyone'),
+        (1,'Accounts you follow'),
+        (2,'Verified'),
+        (3,'Only accounts mention')
+    )
+
+    reply_by = models.IntegerField(default=0, choices=REPLY_TYPES)
+    # mentions = models.ManyToManyField(User)
+    tweet_media =models.ManyToManyField(T_Media)
+    active_status = models.BooleanField(default=True)
+    schedule_tym = models.DateTimeField(null=True, blank=True)
+    end_tym = models.DateTimeField(null=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+
+
+class ReplyTweet(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    reply_to = models.ForeignKey(Tweet, on_delete=models.CASCADE)
+    TWEET_TYPES = (
+        (0, 'Message'),
+        (1, 'Media'),
+    )
+    tweet_type = models.IntegerField(default=0, choices=TWEET_TYPES)
+    active_status = models.BooleanField(default=True)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+
