@@ -15,6 +15,12 @@ class User(AbstractUser):
 class T_Media(models.Model):
     file_name = models.FileField(upload_to="tweets")
 
+
+class Tags(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    used_times = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+
 class Tweet(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     msg = models.CharField(max_length=500, null=True)
