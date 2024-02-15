@@ -66,10 +66,16 @@
 		.menu ul li {
 			float: none;
 		}
+		.circle {
+			width: 50px;
+			height: 50px;
+			border-radius: 50%; /* This will make the square div appear as a circle */
+			background-color: #e1dcdc; /* Color of the circle */
+		}
 	</style>
 
 	<div id="page">
-		<main class="bg_gray">
+		<main class="">
 			<div class=" margin_30 m-4 mt-2">  
 				<div class="row">
 					<div class="col-lg-2">
@@ -82,8 +88,33 @@
 								<li><a href="#0"><span class="ti-blackboard"></span> Grok</a></li>
 								<li><a href="#0"><span class="ti-file"></span> Lists</a></li>
 								<li><a href="#0"><span class="ti-user"></span> Profile</a></li>
-								<li><a href="#0"><span class="ti-more"></span> More</a></li>
+								<li><a href="#0"><span class="ti-more-alt"></span> More</a></li>
 								<li><a href="#0" class="btn_1 full-width">Post</a></li>	
+
+
+								<li>
+									<div class="user-info m-3">
+										<div class="image m-2" style="float:left;">
+											{% if user.profile_imgg %}
+												<img src="assets/images/xs/avatar1.jpg" width="48" height="48" alt="User">
+											{% else %}
+												<div class="circle"></div>
+											{% endif %}
+										</div>
+										<div class="info-container" style="float:left;">
+											<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">{{ user.first_name }} {{ user.last_name }}</div>
+											<div class="email" style="font-size:10px;">{{ user.username }}</div>
+											<div class="btn-group user-helper-dropdown">
+												<span class="ti-more-alt"></span>
+												<ul class="dropdown-menu pull-right">
+													<!-- <li><a href="my-profile.php"><i class="material-icons">person</i>Add an existing account</a></li> -->
+													
+													<li><a href="{% url 'user:Logout' %}"><span class="ti-shift-left"></span> Sign Out</a></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -104,7 +135,7 @@
 						<!-- /widget -->
 						<div class="widget">
 							<div class="widget-title">
-								<h4>Latest Post</h4>
+								<h4>What's Happening</h4>
 							</div>
 							<ul class="comments-list">
 								<li>

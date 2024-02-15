@@ -89,4 +89,24 @@ def check_login(request):
 def home(request):
     if request.user.is_authenticated:
         return render(request,'home/home.html')
-    return redirect('index')   
+    return redirect('index')
+
+
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+def load_tweets(request):
+    
+    all_tweets = Tweet.objects.all()
+    page = request.GET.get('page')    
+    paginator = Paginator(all_tweets, 10)  # Adjust per_page as needed
+    try:
+        tweets = paginator.page(page)
+    except PageNotAnInteger:
+        tweets = paginator.page(1)
+    except EmptyPage:
+        tweets = []
+
+    tweets_html = render_to_string('home/tweet_list_ajax.html', {'tweets': tweets})
+    return JsonResponse({'tweets_html': tweets_html})

@@ -10,6 +10,8 @@ class User(AbstractUser):
     email_otp = models.CharField(max_length=25, null=True, blank=True )
     email_verified = models.BooleanField(default=False)
     verified_account = models.BooleanField(default=False)
+    profile_imgg = models.FileField(upload_to="profile", null=True, blank=True)
+    bg_imgg = models.FileField(upload_to="profile", null=True, blank=True)
 
 
 class T_Media(models.Model):
