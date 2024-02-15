@@ -9,6 +9,8 @@ app_name = 'user'
 urlpatterns = [
     # path('',),
     path('signup', views.signup, name='Signup'),
-    path('signin', views.signin, name='Signin')
+    path('signin', views.signin, name='Signin'),
+    path('logout', views.user_logout, name='Logout'),
+
 
 ]

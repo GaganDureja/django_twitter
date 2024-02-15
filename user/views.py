@@ -72,6 +72,14 @@ def signin(request):
                 # return render(request,'index')
 
 
+def user_logout(request):
+    if request.user.is_authenticated:
+        logout(request)
+        messages.success(request, "Logout success")
+    else:
+        messages.warning(request, "Already Logged out")
+    return redirect('index')   
+
 
 def check_login(request):
     if request.user.is_authenticated:
