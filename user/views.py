@@ -100,7 +100,7 @@ def load_tweets(request):
     
     all_tweets = Tweet.objects.all()
     page = request.GET.get('page')    
-    paginator = Paginator(all_tweets, 10)  # Adjust per_page as needed
+    paginator = Paginator(all_tweets, 2)  # Adjust per_page as needed
     try:
         tweets = paginator.page(page)
     except PageNotAnInteger:

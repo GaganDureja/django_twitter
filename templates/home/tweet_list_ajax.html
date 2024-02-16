@@ -1,30 +1,30 @@
 
+{% load static %}
 
-{% for product in products %}
-<div class="col-6 col-md-4">
-    <div class="grid_item">
-        <span class="ribbon off">{% percent_discount product.price product.mrp %}</span>
-        <figure>
-            <a href="{% url 'products:product_detail' product.slug %}">
-                {% for image in product.product_images.all|slice:":1" %}
-                <img   class="img-fluid lazy lazyload" data-src="{{ image.img.url }}" alt="loading">
-                {% endfor %}
-            </a>
-        </figure>
-        <a href="{% url 'products:product_detail' product.slug %}">
-            <h3>{{product.name}}</h3>
-        </a>
-        <div class="price_box">
-            <span class="new_price">₹ {{product.price}}</span>
-            <span class="old_price">₹ {{product.mrp}}</span>
-        </div>
-        <ul>
-            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a></li>
-            <li><a href="{% url 'add_to_cart' product.id %}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
-        </ul>
+{% for tweet in tweets %}
+
+    <div class="col-md-12">
+        <article class="blog">
+            <figure>
+                <a href="blog-post.html"><img src="{% static 'img/blog-1.jpg' %}" alt="">
+                    <div class="preview"><span>Read more</span></div>
+                </a>
+            </figure>
+            <div class="post_info">
+                <small>Category - 20 Nov. 2017</small>
+                <h2><a href="blog-post.html">{{tweet.id}}</a></h2>
+                <p>Quodsi sanctus pro eu, ne audire scripserit quo. Vel an enim offendit salutandi, in eos quod omnes epicurei, ex veri qualisque scriptorem mei.</p>
+                <ul>
+                    <li>
+                        <div class="thumb"><img src="{% static 'img/avatar.jpg' %}" alt=""></div> Admin
+                    </li>
+                    <li><i class="ti-comment"></i>20</li>
+                </ul>
+            </div>
+        </article>
+        <!-- /article -->
     </div>
-    <!-- /grid_item -->
-</div>
-<!-- /col -->
+    <!-- /col -->
+
 
 {% endfor %}

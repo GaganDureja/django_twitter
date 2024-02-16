@@ -24,14 +24,14 @@
 
 {% block main_content %}
 
-
+	<input type="hidden" id="load_tweet_type" value="any">
 	 
 		<ul class="nav nav-tabs" id="tab_checkout" role="tablist">
 			<li class="nav-item m-auto" role="presentation">
-				<a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#tab_1" role="tab" aria-controls="tab_1" aria-selected="true">For You</a>
+				<a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#tab_1" role="tab" onclick="$('#load_tweet_type').val('any');start_load_tweets()" aria-controls="tab_1" aria-selected="true">For You</a>
 			</li>
 			<li class="nav-item m-auto" role="presentation">
-				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_2" role="tab" aria-controls="tab_2" aria-selected="false" tabindex="-1">Following</a>
+				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_2" role="tab" onclick="$('#load_tweet_type').val('follow');start_load_tweets()" aria-controls="tab_2" aria-selected="false" tabindex="-1">Following</a>
 			</li>
 		</ul>
 
@@ -39,59 +39,17 @@
 		<!-- my tweet -->
 
 		<div class="tab-content checkout">
-			<div class="tab-pane fade active show" id="tab_1" role="tabpanel" aria-labelledby="tab_1">tab 1</div>
-			<div class="tab-pane fade" id="tab_2" role="tabpanel" aria-labelledby="tab_2">tab 2</div>
+			<div class="tab-pane fade active show row" id="tab_1" role="tabpanel" aria-labelledby="tab_1">
+
+			</div>
+			<div class="tab-pane fade row" id="tab_2" role="tabpanel" aria-labelledby="tab_2">
+
+			</div>
 		</div>
 	 
 
 	
-	<div class="row">
-		<div class="col-md-12">
-			<article class="blog">
-				<figure>
-					<a href="blog-post.html"><img src="img/blog-1.jpg" alt="">
-						<div class="preview"><span>Read more</span></div>
-					</a>
-				</figure>
-				<div class="post_info">
-					<small>Category - 20 Nov. 2017</small>
-					<h2><a href="blog-post.html">Ea exerci option hendrerit</a></h2>
-					<p>Quodsi sanctus pro eu, ne audire scripserit quo. Vel an enim offendit salutandi, in eos quod omnes epicurei, ex veri qualisque scriptorem mei.</p>
-					<ul>
-						<li>
-							<div class="thumb"><img src="img/avatar.jpg" alt=""></div> Admin
-						</li>
-						<li><i class="ti-comment"></i>20</li>
-					</ul>
-				</div>
-			</article>
-			<!-- /article -->
-		</div>
-		<!-- /col -->
-		<div class="col-md-12">
-			<article class="blog">
-				<figure>
-					<a href="blog-post.html"><img src="img/blog-2.jpg" alt="">
-						<div class="preview"><span>Read more</span></div>
-					</a>
-				</figure>
-				<div class="post_info">
-					<small>Category - 20 Nov. 2017</small>
-					<h2><a href="blog-post.html">At usu sale dolorum offendit</a></h2>
-					<p>Quodsi sanctus pro eu, ne audire scripserit quo. Vel an enim offendit salutandi, in eos quod omnes epicurei, ex veri qualisque scriptorem mei.</p>
-					<ul>
-						<li>
-							<div class="thumb"><img src="img/avatar.jpg" alt=""></div> Admin
-						</li>
-						<li><i class="ti-comment"></i>20</li>
-					</ul>
-				</div>
-			</article>
-			<!-- /article -->
-		</div>		
-		<!-- /col -->
-	</div>
-	<!-- /row -->
+	
 {% endblock %}
 
 
@@ -101,23 +59,25 @@
 {% block specific_js %}
 
 	<script>
+		var page = 2;
+		var loading = false;
 		$(document).ready(function() {
-			var page = 2;
-			var loading = false;
-
-			// for you and following
-
-			$(window).scroll(function() {
+			$(window).scroll(function() {				
 				if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+					var type = $('#load_tweet_type').val();	
 					if (!loading) {
 						loading = true;
 						$.ajax({
 							url: 'user/load-more-tweets/',
 							type: 'GET',
-							data: {'page': page},
+							data: {'page': page, 'type':type},
 							success: function(data) {
 								if (data.tweets_html) {
-									$('#tweet-container').append(data.tweets_html);
+									if(type=='any'){
+										$('#tab_1').append(data.tweets_html);										
+									}else{
+										$('#tab_2').append(data.tweets_html);
+									}
 									page += 1;
 									loading = false;
 								}
@@ -136,6 +96,38 @@
 			});
 		});
 	</script>
+
+<script>
+	function start_load_tweets() {
+		console.log(loading);
+		page = 2;
+		var type = $('#load_tweet_type').val();
+		$.ajax({
+			url: 'user/load-more-tweets/',
+			type: 'GET',
+			data: {'page': 1, 'type':type},
+			success: function(data) {
+				if (data.tweets_html) {
+					if(type=='any'){
+						$('#tab_1').html(data.tweets_html);
+					}else{
+						$('#tab_2').html(data.tweets_html);										
+					}
+					loading = false;
+				}
+			},
+			error: function(xhr, status, error) {
+				Swal.fire({
+					title: "",
+					text: error,
+					icon: "error",
+				});
+			}
+		});
+	}
+	start_load_tweets();
+</script>
+
 		
 {% endblock %}
 		

@@ -42,8 +42,9 @@ class Tweet(models.Model):
     )
 
     reply_by = models.IntegerField(default=0, choices=REPLY_TYPES)
+    # error3
     # mentions = models.ManyToManyField(User)
-    tweet_media =models.ManyToManyField(T_Media)
+    tweet_media =models.ManyToManyField(T_Media, null=True, blank=True)
     active_status = models.BooleanField(default=True)
     schedule_tym = models.DateTimeField(null=True, blank=True)
     end_tym = models.DateTimeField(null=True, blank=True)
