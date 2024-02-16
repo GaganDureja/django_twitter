@@ -42,28 +42,60 @@ class Tweet(models.Model):
     )
 
     reply_by = models.IntegerField(default=0, choices=REPLY_TYPES)
-    # error3
-    # mentions = models.ManyToManyField(User)
-    tweet_media =models.ManyToManyField(T_Media, null=True, blank=True)
+    reply_to = models.ForeignKey('self', on_delete=models.CASCADE)
+    repost_tweet = models.IntegerField(default=0)
+    # error
+    # mentions = models.ManyToManyField(User, null=True, blank=True)
+    tweet_media =models.ManyToManyField(T_Media)
+    tweet_tags =models.ManyToManyField(Tags)
     active_status = models.BooleanField(default=True)
     schedule_tym = models.DateTimeField(null=True, blank=True)
     end_tym = models.DateTimeField(null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+    total_likes = models.IntegerField(default=0)
+    total_views = models.IntegerField(default=0)
+    total_comments = models.IntegerField(default=0)
 
 
-
-class ReplyTweet(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    reply_to = models.ForeignKey(Tweet, on_delete=models.CASCADE)
-    TWEET_TYPES = (
-        (0, 'Message'),
-        (1, 'Media'),
+class Likes(models.Model):
+    LIKE_TYPES = (
+        (0, 'Tweet'),
+        (1, 'Reply')        
     )
-    tweet_type = models.IntegerField(default=0, choices=TWEET_TYPES)
-    active_status = models.BooleanField(default=True)
+    post_id = models.IntegerField()
+    type = models.IntegerField(default=0, choices=LIKE_TYPES)
+    liked_by = models.ForeignKey(User,on_delete=models.CASCADE)
 
-    created_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
+
+class Views(models.Model):
+    VIEW_TYPES = (
+        (0, 'Tweet'),
+        (1, 'Reply')        
+    )
+    post_id = models.IntegerField()
+    type = models.IntegerField(default=0, choices=VIEW_TYPES)
+    viewed_by = models.ForeignKey(User,on_delete=models.CASCADE)
+
+
+
+# class ReplyTweet(models.Model):
+#     user = models.ForeignKey(User,on_delete=models.CASCADE)
+#     reply_to = models.ForeignKey(Tweet, on_delete=models.CASCADE)
+#     TWEET_TYPES = (
+#         (0, 'Message'),
+#         (1, 'Media'),
+#     )
+#     tweet_type = models.IntegerField(default=0, choices=TWEET_TYPES)
+#     active_status = models.BooleanField(default=True)
+
+#     created_on = models.DateTimeField(auto_now_add=True)
+#     updated_on = models.DateTimeField(auto_now=True)
+
+
+
+class Following(models.Model):
+    main_user = models.ForeignKey(User, related_name='following_set', on_delete=models.CASCADE)
+    following_to = models.ForeignKey(User, related_name='follower_set', on_delete=models.CASCADE)
 
 
