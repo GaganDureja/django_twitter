@@ -110,3 +110,7 @@ def load_tweets(request):
 
     tweets_html = render_to_string('home/tweet_list_ajax.html', {'tweets': tweets})
     return JsonResponse({'tweets_html': tweets_html})
+
+
+def add_tweet(request):
+    pass

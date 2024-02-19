@@ -37,7 +37,63 @@
 
 
 		<!-- my tweet -->
-		<form>
+		<form method="post" class="row" action="{% url 'user:add_tweet' %}">
+			{% csrf_token %}
+			<input type="hidden" id="reply_type" value="0">
+			<div class="col-md-1">
+				{% if user.profile_imgg %}
+					<img src="assets/images/xs/avatar1.jpg" width="48" height="48" alt="User">
+				{% else %}
+					<div class="circle"></div>
+				{% endif %}
+			</div>
+
+			<div class="col-md-11" >
+				<div class="form-group">						
+					<input class="form-control" style="border:none;" placeholder="What is Happening?!">
+				</div>
+				<div class="m-2" style="position: relative;">
+					<a href="javascript:void(0)" onclick="show_reply_type()" id="selected_reply_by"><span class="ti-world"> Everyone</span></a>
+
+					<div id="reply_type_options" class="privacy_option" style="display: none;">
+						<p></p>
+						<ul style="list-style: none;">
+							<li style="cursor: pointer;"><span class="ti-world" onclick="select_reply_by_privacy(0)"> Everyone</span></li>
+							<li style="cursor: pointer;"><span class="ti-user" onclick="select_reply_by_privacy(1)"> Accounts you follow</span></li>
+							<li style="cursor: pointer;"><span class="ti-id-badge" onclick="select_reply_by_privacy(2)"> Verified Accounts</span></li>
+							<li style="cursor: pointer;"><span class="ti-tag" onclick="select_reply_by_privacy(3)"> Only accounts you mention</span></li>
+						</ul>
+					</div>
+				</div>
+
+				<input type="file" id="fileInput" onchange="check_media_upload('fileInput')" name="files[]" multiple accept="image/*,video/*" style="display: none;">
+
+
+				<div class="row add_bottom_25 m-2">
+					<div class="col-lg-6">
+						<ul class="footer-selector clearfix">
+							<li>
+								<label for="fileInput" ><span class="ti-image"></span></label>
+							</li>							 
+						</ul>
+					</div>
+					<div class="col-lg-6">
+						<ul class="additional_links">
+							<li><input type="submit" value="Post"></li>
+							<li><a href="#0">Privacy</a></li>
+							<li><span>© 2022 Allaia</span></li>
+						</ul>
+					</div>
+				</div>
+				
+
+				
+
+			</div>
+			<!-- /col -->
+
+			 
+			
 			
 		</form>
 
@@ -130,6 +186,28 @@
 		});
 	}
 	start_load_tweets();
+</script>
+
+<script>
+	function show_reply_type(){
+		$("#reply_type_options").toggle();
+	}
+	function select_reply_by_privacy(str){
+		if(str==1){
+			$("#reply_type").val(1);
+			$("#selected_reply_by").html('<span class="ti-user"> Accounts you follow</span>');
+		}else if(str==2){
+			$("#reply_type").val(2);
+			$("#selected_reply_by").html('<span class="ti-id-badge"> Verified Accounts</span>');
+		}else if(str==3){
+			$("#reply_type").val(3);
+			$("#selected_reply_by").html('<span class="ti-tag"> Only accounts you mention</span>');
+		}else{
+			$("#reply_type").val(0);
+			$("#selected_reply_by").html('<span class="ti-world"> Everyone</span>');
+		}
+		show_reply_type();
+	}
 </script>
 
 		

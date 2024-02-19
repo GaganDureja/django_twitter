@@ -42,12 +42,11 @@ class Tweet(models.Model):
     )
 
     reply_by = models.IntegerField(default=0, choices=REPLY_TYPES)
-    reply_to = models.ForeignKey('self', on_delete=models.CASCADE)
+    reply_to = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     repost_tweet = models.IntegerField(default=0)
-    # error
-    # mentions = models.ManyToManyField(User, null=True, blank=True)
-    tweet_media =models.ManyToManyField(T_Media)
-    tweet_tags =models.ManyToManyField(Tags)
+    mentions = models.ManyToManyField(User, related_name='mentioned_in_tweets', null=True, blank=True)
+    tweet_media =models.ManyToManyField(T_Media, null=True, blank=True)
+    tweet_tags =models.ManyToManyField(Tags, null=True, blank=True)
     active_status = models.BooleanField(default=True)
     schedule_tym = models.DateTimeField(null=True, blank=True)
     end_tym = models.DateTimeField(null=True, blank=True)
@@ -57,24 +56,27 @@ class Tweet(models.Model):
     total_views = models.IntegerField(default=0)
     total_comments = models.IntegerField(default=0)
 
+# class Reply(models.Model):
+
+
 
 class Likes(models.Model):
-    LIKE_TYPES = (
-        (0, 'Tweet'),
-        (1, 'Reply')        
-    )
+    # LIKE_TYPES = (
+    #     (0, 'Tweet'),
+    #     (1, 'Reply')        
+    # )
     post_id = models.IntegerField()
-    type = models.IntegerField(default=0, choices=LIKE_TYPES)
+    # type = models.IntegerField(default=0, choices=LIKE_TYPES)
     liked_by = models.ForeignKey(User,on_delete=models.CASCADE)
 
 
 class Views(models.Model):
-    VIEW_TYPES = (
-        (0, 'Tweet'),
-        (1, 'Reply')        
-    )
+    # VIEW_TYPES = (
+    #     (0, 'Tweet'),
+    #     (1, 'Reply')        
+    # )
     post_id = models.IntegerField()
-    type = models.IntegerField(default=0, choices=VIEW_TYPES)
+    # type = models.IntegerField(default=0, choices=VIEW_TYPES)
     viewed_by = models.ForeignKey(User,on_delete=models.CASCADE)
 
 

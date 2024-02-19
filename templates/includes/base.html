@@ -72,6 +72,18 @@
 			border-radius: 50%; /* This will make the square div appear as a circle */
 			background-color: #e1dcdc; /* Color of the circle */
 		}
+
+		.privacy_option{
+			position: absolute;
+			top: 100%;
+			width: 300px;
+			background: #fff;
+			-webkit-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.175);
+			-moz-box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.175);
+			box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.175);
+			z-index: 99;
+			border-top: 2px solid #004dda;
+		}
 	</style>
 
 	<div id="page">
@@ -229,6 +241,37 @@
 		</script>
 		{% endfor %}
 	{% endif %}
+
+
+
+	<script>
+		function check_media_upload(str){
+			inp = document.getElementById(str)
+			var files = inp.files;
+			if (files.length > 4) {
+				Swal.fire({
+					title: "",
+					text: "You can only upload a maximum of 4 files.",
+					icon: "info",
+				});
+				inp.value = '';
+				return false;
+			}
+			for (var i = 0; i < files.length; i++) {
+				var file = files[i];
+				var fileType = file.type.split('/')[0];
+				if (fileType !== 'image' && fileType !== 'video') {
+					Swal.fire({
+						title: "",
+						text: "Please select only image or video files.",
+						icon: "info",
+					});					
+					inp.value = '';
+					return false;
+				}
+			}
+		}		
+		</script>
 
 	
 </body>
