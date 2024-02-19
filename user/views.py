@@ -98,8 +98,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-def load_tweets(request):
-    
+def load_tweets(request):    
     all_tweets = Tweet.objects.all().order_by('-id')
     page = request.GET.get('page')    
     paginator = Paginator(all_tweets, 2)  # Adjust per_page as needed
@@ -146,4 +145,22 @@ def add_tweet(request):
     messages.success(request, "Tweet uploaded")
     return redirect('home')
 
+
+from django.urls import reverse
+@login_required
+def follow_user(request, follow_to):
+    already_follow = Following.objects.filter(
+        following_to=follow_to,
+        main_user=request.user
+    )
+    messages.info(request, "Already Following")
+    if not already_follow:
+        new_following = Following.objects.create(
+            following_to=follow_to,
+            main_user=request.user
+        )
+        new_following.save()
+        messages.info(request, "Following Successfully")
+
+    return redirect(request.META.get('HTTP_REFERER', reverse('home')))
 
