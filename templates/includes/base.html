@@ -71,6 +71,8 @@
 			height: 50px;
 			border-radius: 50%; /* This will make the square div appear as a circle */
 			background-color: #e1dcdc; /* Color of the circle */
+			font-size: 35px;
+   	 		text-align: center;
 		}
 
 		.privacy_option{
@@ -110,7 +112,7 @@
 											{% if user.profile_imgg %}
 												<img src="assets/images/xs/avatar1.jpg" width="48" height="48" alt="User">
 											{% else %}
-												<div class="circle"></div>
+												<div class="circle">{{user.first_name|slice:":1" }}</div>
 											{% endif %}
 										</div>
 										<div class="info-container" style="float:left;">
@@ -151,56 +153,50 @@
 							</div>
 							<ul class="comments-list">
 								<li>
-									<div class="alignleft">
-										<a href="#0"><img src="{% static 'img/blog-5.jpg' %}" alt=""></a>
+									<div class="user-info m-3">
+										<div class="image m-2" style="float:left;">
+											{% if user.profile_imgg %}
+												<img src="assets/images/xs/avatar1.jpg" width="48" height="48" alt="User">
+											{% else %}
+												<div class="circle">{{user.first_name|slice:":1" }}</div>
+											{% endif %}
+										</div>
+										<div class="info-container" style="float:left;">
+											<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">{{ user.first_name }} {{ user.last_name }}</div>
+											<div class="email" style="font-size:10px;">{{ user.username }}</div>
+										</div>
 									</div>
-									<small>Category - 11.08.2016</small>
-									<h3><a href="#" title="">Verear qualisque ex minimum...</a></h3>
 								</li>
-								<li>
-									<div class="alignleft">
-										<a href="#0"><img src="{% static 'img/blog-6.jpg' %}" alt=""></a>
-									</div>
-									<small>Category - 11.08.2016</small>
-									<h3><a href="#" title="">Verear qualisque ex minimum...</a></h3>
-								</li>
-								<li>
-									<div class="alignleft">
-										<a href="#0"><img src="{% static 'img/blog-4.jpg' %}" alt=""></a>
-									</div>
-									<small>Category - 11.08.2016</small>
-									<h3><a href="#" title="">Verear qualisque ex minimum...</a></h3>
-								</li>
+								
 							</ul>
 						</div>
 						<!-- /widget -->
 						<div class="widget">
 							<div class="widget-title">
-								<h4>Categories</h4>
+								<h4>Who to follow </h4>
 							</div>
-							<ul class="cats">
-								<li><a href="#">Food <span>(12)</span></a></li>
-								<li><a href="#">Places to visit <span>(21)</span></a></li>
-								<li><a href="#">New Places <span>(44)</span></a></li>
-								<li><a href="#">Suggestions and guides <span>(31)</span></a></li>
+							<ul class="comments-list">
+								{% for random_user in random_user_ids %}								
+								<li>
+									<div class="user-info m-3">
+										<div class="image m-2" style="float:left;">
+											{% if random_user.profile_imgg %}
+												<img src="assets/images/xs/avatar1.jpg" width="48" height="48" alt="User">
+											{% else %}
+												<div class="circle">{{random_user.first_name|slice:":1" }}</div>
+											{% endif %}
+										</div>
+										<div class="info-container" style="float:left;">
+											<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">{{ random_user.first_name }} {{ random_user.last_name }}</div>
+											<div class="email" style="font-size:10px;">{{ random_user.username }}</div>
+										</div>
+									</div>
+								</li>
+								{% endfor %}
 							</ul>
 						</div>
 						<!-- /widget -->
-						<div class="widget">
-							<div class="widget-title">
-								<h4>Popular Tags</h4>
-							</div>
-							<div class="tags">
-								<a href="#">Food</a>
-								<a href="#">Bars</a>
-								<a href="#">Cooktails</a>
-								<a href="#">Shops</a>
-								<a href="#">Best Offers</a>
-								<a href="#">Transports</a>
-								<a href="#">Restaurants</a>
-							</div>
-						</div>
-						<!-- /widget -->
+						
 					</aside>
 					<!-- /aside -->
 				</div>

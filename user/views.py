@@ -89,7 +89,7 @@ def check_login(request):
     return render(request,'home/index.html')
 
 def home(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated:        
         return render(request,'home/home.html')
     return redirect('index')
 
@@ -100,7 +100,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def load_tweets(request):
     
-    all_tweets = Tweet.objects.all()
+    all_tweets = Tweet.objects.all().order_by('-id')
     page = request.GET.get('page')    
     paginator = Paginator(all_tweets, 2)  # Adjust per_page as needed
     try:
@@ -115,25 +115,35 @@ def load_tweets(request):
 
 @login_required
 def add_tweet(request):
-    data_uploaded = dict(request.POST.items())
-    for key, value in request.POST.items():
-        print(f"Key: {key}, Value: {value}")
+   
     # tweet_type = 0,
     # if request.POST.get('files[]'):
     #     tweet_type = 1
 
+    user_mentions = ""
+    tags_used = ""
+    # mentions = user_mentions,
+    # tweet_tags = tags_used
 
+    if request.POST.get('reply_to'):
+        reply_to = request.POST.get('reply_to')
+    else:
+        reply_to = None
 
-    # Tweet.objects.create(
-    #     user = models.ForeignKey(User,on_delete=models.CASCADE),
-    #     msg = request.POST.get('message'),
-    #     reply_by = request.POST.get('message'),
-    #     reply_to = request.POST.get('message'),
-    #     repost_tweet = request.POST.get('message'),
-    #     mentions = request.POST.get('message'),
-    #     tweet_tags = request.POST.get('message')       
-    # )
-    messages.success(request, f"Tweet done {data_uploaded}")
+    if request.POST.get('repost_tweet'):
+        reposting = request.POST.get('repost_tweet')
+    else:
+        reposting = None
+     
+    Tweet.objects.create(
+        user = request.user,
+        msg = request.POST.get('message'),
+        reply_by = request.POST.get('reply_type'),
+        reply_to = reply_to,
+        repost_tweet = reposting,
+        
+    )
+    messages.success(request, "Tweet uploaded")
     return redirect('home')
 
 

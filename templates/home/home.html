@@ -44,7 +44,7 @@
 				{% if user.profile_imgg %}
 					<img src="assets/images/xs/avatar1.jpg" width="48" height="48" alt="User">
 				{% else %}
-					<div class="circle"></div>
+					<div class="circle">{{user.first_name|slice:":1" }}</div>
 				{% endif %}
 			</div>
 
@@ -67,6 +67,7 @@
 				</div>
 
 				<input type="hidden" name="reply_to" value="">
+				<input type="hidden" name="repost_tweet" value="">
 
 				<input type="file" id="fileInput" onchange="check_media_upload('fileInput')" name="files[]" multiple accept="image/*,video/*" style="display: none;">
 

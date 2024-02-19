@@ -95,7 +95,8 @@ article.blog figure img:hover {
   }
 }
 article.blog .post_info {
-  padding: 20px 30px  30px 30px;
+  /* padding: 20px 30px  30px 30px; */
+  padding: 10px;
   position: relative;
   box-sizing: border-box;
 }
@@ -116,20 +117,21 @@ article.blog .post_info h2 a:hover {
   color: #004dda;
 }
 article.blog .post_info ul {
-  margin: 0 -30px 0 -30px;
-  padding: 20px 30px 0 30px;
+  /* margin: 0 -30px 0 -30px; */
+  /* padding: 20px 30px 0 30px; */
+  padding: 0;
   width: 100%;
   box-sizing: content-box;
-  border-top: 1px solid #ededed;
+  /* border-top: 1px solid #ededed; */
 }
 article.blog .post_info ul li {
   display: inline-block;
   position: relative;
-  padding: 12px 0  0 50px;
+  padding: 5px 0  0 60px;
   font-weight: 500;
   font-size: 12px;
-  font-size: 0.75rem;
-  color: #999;
+  font-size: 1rem;
+  /* color: #999; */
 }
 article.blog .post_info ul li .thumb {
   width: 40px;
@@ -163,10 +165,11 @@ article.blog .post_info ul li:last-child {
 }
 article.blog .post_info ul li:last-child i {
   font-size: 14px;
-  font-size: 0.875rem;
+  font-size: 1rem;
   margin-right: 5px;
   position: relative;
   top: 3px;
+  font-weight: 500;
 }
 @media (max-width: 991px) {
   article.blog .post_info ul {
