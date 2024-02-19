@@ -39,7 +39,7 @@
 		<!-- my tweet -->
 		<form method="post" class="row" action="{% url 'user:add_tweet' %}">
 			{% csrf_token %}
-			<input type="hidden" id="reply_type" value="0">
+			<input type="hidden" name="reply_type" id="reply_type" value="0">
 			<div class="col-md-1">
 				{% if user.profile_imgg %}
 					<img src="assets/images/xs/avatar1.jpg" width="48" height="48" alt="User">
@@ -50,7 +50,7 @@
 
 			<div class="col-md-11" >
 				<div class="form-group">						
-					<input class="form-control" style="border:none;" placeholder="What is Happening?!">
+					<input class="form-control" name="message" style="border:none;" placeholder="What is Happening?!">
 				</div>
 				<div class="m-2" style="position: relative;">
 					<a href="javascript:void(0)" onclick="show_reply_type()" id="selected_reply_by"><span class="ti-world"> Everyone</span></a>
@@ -66,6 +66,8 @@
 					</div>
 				</div>
 
+				<input type="hidden" name="reply_to" value="">
+
 				<input type="file" id="fileInput" onchange="check_media_upload('fileInput')" name="files[]" multiple accept="image/*,video/*" style="display: none;">
 
 
@@ -73,15 +75,13 @@
 					<div class="col-lg-6">
 						<ul class="footer-selector clearfix">
 							<li>
-								<label for="fileInput" ><span class="ti-image"></span></label>
-							</li>							 
+								<label for="fileInput" ><b><span class="ti-image"></span></b></label>
+							</li>
 						</ul>
 					</div>
 					<div class="col-lg-6">
 						<ul class="additional_links">
-							<li><input type="submit" value="Post"></li>
-							<li><a href="#0">Privacy</a></li>
-							<li><span>© 2022 Allaia</span></li>
+							<li><input type="submit" class="btn_1 full-width" value="Post"></li>							
 						</ul>
 					</div>
 				</div>

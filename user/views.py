@@ -3,6 +3,8 @@ from .models import *
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 
@@ -111,6 +113,27 @@ def load_tweets(request):
     tweets_html = render_to_string('home/tweet_list_ajax.html', {'tweets': tweets})
     return JsonResponse({'tweets_html': tweets_html})
 
-
+@login_required
 def add_tweet(request):
-    pass
+    data_uploaded = dict(request.POST.items())
+    for key, value in request.POST.items():
+        print(f"Key: {key}, Value: {value}")
+    # tweet_type = 0,
+    # if request.POST.get('files[]'):
+    #     tweet_type = 1
+
+
+
+    # Tweet.objects.create(
+    #     user = models.ForeignKey(User,on_delete=models.CASCADE),
+    #     msg = request.POST.get('message'),
+    #     reply_by = request.POST.get('message'),
+    #     reply_to = request.POST.get('message'),
+    #     repost_tweet = request.POST.get('message'),
+    #     mentions = request.POST.get('message'),
+    #     tweet_tags = request.POST.get('message')       
+    # )
+    messages.success(request, f"Tweet done {data_uploaded}")
+    return redirect('home')
+
+

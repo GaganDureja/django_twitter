@@ -43,7 +43,7 @@ class Tweet(models.Model):
 
     reply_by = models.IntegerField(default=0, choices=REPLY_TYPES)
     reply_to = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-    repost_tweet = models.IntegerField(default=0)
+    repost_tweet = models.ForeignKey('self', on_delete=models.CASCADE,related_name='repost_tweets', null=True, blank=True)
     mentions = models.ManyToManyField(User, related_name='mentioned_in_tweets', null=True, blank=True)
     tweet_media =models.ManyToManyField(T_Media, null=True, blank=True)
     tweet_tags =models.ManyToManyField(Tags, null=True, blank=True)
@@ -52,7 +52,9 @@ class Tweet(models.Model):
     end_tym = models.DateTimeField(null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+    likes = models.ManyToManyField(User, related_name='liked_by', null=True, blank=True)
     total_likes = models.IntegerField(default=0)
+    views = models.ManyToManyField(User, related_name='viewed_by', null=True, blank=True)
     total_views = models.IntegerField(default=0)
     total_comments = models.IntegerField(default=0)
 
@@ -60,24 +62,24 @@ class Tweet(models.Model):
 
 
 
-class Likes(models.Model):
-    # LIKE_TYPES = (
-    #     (0, 'Tweet'),
-    #     (1, 'Reply')        
-    # )
-    post_id = models.IntegerField()
-    # type = models.IntegerField(default=0, choices=LIKE_TYPES)
-    liked_by = models.ForeignKey(User,on_delete=models.CASCADE)
+# class Likes(models.Model):
+#     # LIKE_TYPES = (
+#     #     (0, 'Tweet'),
+#     #     (1, 'Reply')        
+#     # )
+#     post_id = models.ForeignKey(Tweet, on_delete=models.CASCADE)
+#     # type = models.IntegerField(default=0, choices=LIKE_TYPES)
+#     liked_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
-class Views(models.Model):
-    # VIEW_TYPES = (
-    #     (0, 'Tweet'),
-    #     (1, 'Reply')        
-    # )
-    post_id = models.IntegerField()
-    # type = models.IntegerField(default=0, choices=VIEW_TYPES)
-    viewed_by = models.ForeignKey(User,on_delete=models.CASCADE)
+# class Views(models.Model):
+#     # VIEW_TYPES = (
+#     #     (0, 'Tweet'),
+#     #     (1, 'Reply')        
+#     # )
+#     post_id = models.IntegerField()
+#     # type = models.IntegerField(default=0, choices=VIEW_TYPES)
+#     viewed_by = models.ForeignKey(User,on_delete=models.CASCADE)
 
 
 
