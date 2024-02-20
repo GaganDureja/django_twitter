@@ -37,7 +37,7 @@
 
 
 		<!-- my tweet -->
-		<form method="post" class="row" action="{% url 'user:add_tweet' %}">
+		<form method="post" class="row" action="{% url 'user:add_tweet' %}" enctype="multipart/form-data" >
 			{% csrf_token %}
 			<input type="hidden" name="reply_type" id="reply_type" value="0">
 			<div class="col-md-1">
@@ -69,7 +69,7 @@
 				<input type="hidden" name="reply_to" value="">
 				<input type="hidden" name="repost_tweet" value="">
 
-				<input type="file" id="fileInput" onchange="check_media_upload('fileInput')" name="files[]" multiple accept="image/*,video/*" style="display: none;">
+				<input type="file" id="fileInput" onchange="check_media_upload('fileInput')" name="files" multiple accept="image/*,video/*" style="display: none;">
 
 
 				<div class="row add_bottom_25 m-2">

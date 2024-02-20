@@ -133,17 +133,24 @@ def add_tweet(request):
         reposting = request.POST.get('repost_tweet')
     else:
         reposting = None
-     
-    Tweet.objects.create(
-        user = request.user,
-        msg = request.POST.get('message'),
-        reply_by = request.POST.get('reply_type'),
-        reply_to = reply_to,
-        repost_tweet = reposting,
-        
-    )
-    messages.success(request, "Tweet uploaded")
-    return redirect('home')
+
+    if reposting==None and request.POST.get('message')=="":
+        messages.warning(request, "Message can't be empty")
+    else:
+        tweet = Tweet.objects.create(
+            user = request.user,
+            msg = request.POST.get('message'),
+            reply_by = request.POST.get('reply_type'),
+            reply_to = reply_to,
+            repost_tweet = reposting,
+            
+        )
+        print(request.FILES.getlist('files'),'ffffffffffff')
+        for i in request.FILES.getlist('files'):
+            tweet.tweet_media.add(T_Media.objects.create(file_name=i))
+        messages.success(request, "Tweet uploaded")
+    return redirect(request.META.get('HTTP_REFERER', reverse('home')))
+
 
 
 from django.urls import reverse
