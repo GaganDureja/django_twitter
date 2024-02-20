@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,6 +74,20 @@
 			background-color: #e1dcdc; /* Color of the circle */
 			font-size: 35px;
    	 		text-align: center;
+		}
+		.profile_div{
+			position: relative;
+			top: -20%;			
+			z-index: 99;
+		}
+		.profile_imgg {
+			width: 150px;
+			height: 150px;
+			border-radius: 50%; /* This will make the square div appear as a circle */
+			background-color: #e1dcdc; /* Color of the circle */
+			font-size: 35px;
+   	 		text-align: center;
+			margin-left: 10px;
 		}
 
 		.privacy_option{
@@ -157,7 +172,7 @@
 									<div class="user-info m-3">										
 										<div class="info-container" style="float:left;">
 											<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">#{{ tag.name }}</div>
-											<div class="email" style="font-size:10px;">{{ tag.used_times }} posts</div>
+											<div class="email" style="font-size:10px;">{{ tag.used_times|short_number }} posts</div>
 										</div>
 									</div>
 								</li>
@@ -171,7 +186,7 @@
 								<h4>Who to follow </h4>
 							</div>
 							<ul class="comments-list">
-								{% for random_user in random_user_ids %}								
+								{% for random_user in random_user_ids %}
 								<li>
 									<div class="user-info m-3">
 										<div class="image m-2" style="float:left;">
@@ -265,7 +280,8 @@
 				}
 			}
 		}		
-		</script>
+	</script>
+		
 
 	
 </body>

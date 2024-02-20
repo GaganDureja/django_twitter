@@ -204,12 +204,27 @@ def follow_user(request, follow_to):
 @login_required
 def unfollow_user(request, unfollow_to):
     current_user = request.user
-    user_to_unfollow = get_object_or_404(User, pk=unfollow_to)    
+    user_to_unfollow = get_object_or_404(User, pk=unfollow_to)
     messages.info(request, "Already not Following")
     if current_user.followers.filter(pk=user_to_unfollow.pk).exists():
         current_user.followers.remove(user_to_unfollow)
         messages.success(request, "Removed from Following")
     return redirect(request.META.get('HTTP_REFERER', reverse('home')))
 
+@login_required
+def bookmark(request, tweet_id):
+    current_user = request.user
+    tweet_id = get_object_or_404(Tweet, pk=tweet_id)
+    if current_user.bookmarks.filter(pk=tweet_id.pk).exists():
+        current_user.bookmarks.remove(tweet_id)
+        messages.success(request, "Bookmark removed")
+    else:
+        current_user.bookmarks.add(tweet_id)
+        messages.success(request, "Bookmark added")
+    return redirect(request.META.get('HTTP_REFERER', reverse('home')))
 
-
+    
+def user_page(request, username):
+    user_det = get_object_or_404(User, username=username)
+    total_tweets = Tweet.objects.filter(user=user_det.id).count()
+    return render(request,'user/profile.html', {'user_det':user_det, 'total_tweets':total_tweets})

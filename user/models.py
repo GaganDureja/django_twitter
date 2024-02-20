@@ -13,7 +13,10 @@ class User(AbstractUser):
     profile_imgg = models.FileField(upload_to="profile", null=True, blank=True)
     bg_imgg = models.FileField(upload_to="profile", null=True, blank=True)
     followers = models.ManyToManyField('self')
-
+    bookmarks = models.ManyToManyField('Tweet', related_name='my_bookmarks')
+    header_photo = models.FileField(upload_to="profile", null=True, blank=True)
+    photo = models.FileField(upload_to="profile", null=True, blank=True)
+    
 
 class T_Media(models.Model):
     file_name = models.FileField(upload_to="tweets")
@@ -61,48 +64,5 @@ class Tweet(models.Model):
     total_views = models.IntegerField(default=0)
     total_comments = models.IntegerField(default=0)
 
-# class Reply(models.Model):
-
-
-
-# class Likes(models.Model):
-#     # LIKE_TYPES = (
-#     #     (0, 'Tweet'),
-#     #     (1, 'Reply')        
-#     # )
-#     post_id = models.ForeignKey(Tweet, on_delete=models.CASCADE)
-#     # type = models.IntegerField(default=0, choices=LIKE_TYPES)
-#     liked_by = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
-# class Views(models.Model):
-#     # VIEW_TYPES = (
-#     #     (0, 'Tweet'),
-#     #     (1, 'Reply')        
-#     # )
-#     post_id = models.IntegerField()
-#     # type = models.IntegerField(default=0, choices=VIEW_TYPES)
-#     viewed_by = models.ForeignKey(User,on_delete=models.CASCADE)
-
-
-
-# class ReplyTweet(models.Model):
-#     user = models.ForeignKey(User,on_delete=models.CASCADE)
-#     reply_to = models.ForeignKey(Tweet, on_delete=models.CASCADE)
-#     TWEET_TYPES = (
-#         (0, 'Message'),
-#         (1, 'Media'),
-#     )
-#     tweet_type = models.IntegerField(default=0, choices=TWEET_TYPES)
-#     active_status = models.BooleanField(default=True)
-
-#     created_on = models.DateTimeField(auto_now_add=True)
-#     updated_on = models.DateTimeField(auto_now=True)
-
-
-
-# class Following(models.Model):
-#     main_user = models.ForeignKey(User, related_name='following_set', on_delete=models.CASCADE)
-#     following_to = models.ForeignKey(User, related_name='follower_set', on_delete=models.CASCADE)
 
 

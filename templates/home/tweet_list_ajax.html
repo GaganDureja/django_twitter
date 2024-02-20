@@ -9,14 +9,15 @@
                 <ul>
                     <li>
                         <div class="thumb" style="width: initial; height: initial;">
+                            <a href="{% url 'user_page' tweet.user.username %}">
                             {% if tweet.user.profile_imgg %}
                                 <img src="assets/images/xs/avatar1.jpg" alt="User">
                             {% else %}
                                 <div class="circle  ">{{ tweet.user.first_name|slice:":1" }}</div>
                             {% endif %}
-                            <!-- <img src="{% static 'img/avatar.jpg' %}" alt=""> -->
+                            </a>
                         </div>
-                        <a href="#" class="text-secondary">
+                        <a href="{% url 'user_page' tweet.user.username %}" class="text-secondary">
                             <b class="text-black"> {{ tweet.user.first_name }}</b>
                             @{{ tweet.user.username }} . {{ tweet.created_on }}
                         </a>
@@ -42,7 +43,10 @@
                     <li><i class="ti-loop"></i>{% if tweet.total_reposts > 0 %}  {{ tweet.total_reposts }} {% endif %}</li>
                     <li><i class="ti-heart"></i>{% if tweet.total_likes > 0 %}  {{ tweet.total_likes }} {% endif %}</li>
                     <li><i class="ti-bar-chart"></i>{% if tweet.total_views > 0 %}  {{ tweet.total_views }} {% endif %}</li>
-                    <li><i class="ti-bookmark"></i><i class="ti-share"></i></li>
+                    <li>
+                        <a href="{% url 'user:bookmark' tweet.id %}"><i class="ti-bookmark"></i></a>
+                        <i class="ti-share"></i>
+                    </li>
                 </ul>
             </div>
         </article>

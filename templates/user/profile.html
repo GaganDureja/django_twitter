@@ -1,0 +1,173 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block specific_meta %}
+    <meta name="description" content="Twitter">
+    <meta name="keywords" content="Twitter">
+    <meta name="author" content="Twitter">
+    <title>Twitter</title>
+{% endblock %}
+
+
+{% block specific_css %}
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+{% endblock %}
+	
+
+ 
+ 
+
+	 
+	
+	
+
+{% block main_content %}
+
+    <a href="{% url 'home' %}">
+        <i class="ti-arrow-left"></i>
+    </a>
+    <b>{{ user_det.first_name }}</b>
+    <p>{{total_tweets|short_number}} posts</p>
+	 
+	<div class="top_banner">
+        {% if not user_det.header_photo %}
+        <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.3)" style="background-color: rgba(0, 0, 0, 0.3);">
+        </div>
+        {% else %}
+        <img src="{% static 'img/bg_cat_shoes.jpg' %}" class="img-fluid" alt="">
+        {% endif %}
+
+        
+    </div>
+    
+    <div class="profile_div">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="profile_imgg"></div>
+                </div>
+                <div class="col-6">
+                    {% if request.user.username == user_det.username %}
+                        <button  class="btn btn-light"  style="float: right;">Edit Profile</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        
+        <h4>{{ user_det.first_name }} {{ user_det.last_name }}</h4>
+        <h6>{{ user_det.username }}</h6>
+        <p><i class="ti-calendar"></i> Joined {{ user_det.date_joined }}</p>
+
+        <p>{{ user_det.followers.count }} following</p>
+        
+    </div>
+	
+
+    
+	
+{% endblock %}
+
+
+
+
+
+{% block specific_js %}
+
+	<script>
+		var page = 2;
+		var loading = false;
+		$(document).ready(function() {
+			$(window).scroll(function() {				
+				if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+					var type = $('#load_tweet_type').val();	
+					if (!loading) {
+						loading = true;
+						$.ajax({
+							url: 'user/load-more-tweets/',
+							type: 'GET',
+							data: {'page': page, 'tweet_type':type},
+							success: function(data) {
+								if (data.tweets_html) {
+									if(type=='any'){
+										$('#tab_1').append(data.tweets_html);										
+									}else{
+										$('#tab_2').append(data.tweets_html);
+									}
+									page += 1;
+									loading = false;
+								}
+							},
+							error: function(xhr, status, error) {
+								Swal.fire({
+									title: "",
+									text: error,
+									icon: "error",
+								});								
+								loading = false;
+							}
+						});
+					}
+				}
+			});
+		});
+	</script>
+
+<script>
+	function start_load_tweets() {
+		page = 2;
+		var type = $('#load_tweet_type').val();
+		$.ajax({
+			url: 'user/load-more-tweets/',
+			type: 'GET',
+			data: {'page': 1, 'tweet_type':type},
+			success: function(data) {
+				if (data.tweets_html) {
+					if(type=='any'){
+						$('#tab_1').html(data.tweets_html);
+					}else{
+						$('#tab_2').html(data.tweets_html);										
+					}
+					loading = false;
+				}
+			},
+			error: function(xhr, status, error) {
+				Swal.fire({
+					title: "",
+					text: error,
+					icon: "error",
+				});
+			}
+		});
+	}
+	start_load_tweets();
+</script>
+
+<script>
+	function show_reply_type(){
+		$("#reply_type_options").toggle();
+	}
+	function select_reply_by_privacy(str){
+		if(str==1){
+			$("#reply_type").val(1);
+			$("#selected_reply_by").html('<span class="ti-user"> Accounts you follow</span>');
+		}else if(str==2){
+			$("#reply_type").val(2);
+			$("#selected_reply_by").html('<span class="ti-id-badge"> Verified Accounts</span>');
+		}else if(str==3){
+			$("#reply_type").val(3);
+			$("#selected_reply_by").html('<span class="ti-tag"> Only accounts you mention</span>');
+		}else{
+			$("#reply_type").val(0);
+			$("#selected_reply_by").html('<span class="ti-world"> Everyone</span>');
+		}
+		show_reply_type();
+	}
+</script>
+
+		
+{% endblock %}
+		
+</body>
+</html>
