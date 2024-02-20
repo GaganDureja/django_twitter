@@ -98,8 +98,10 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-def load_tweets(request):    
+def load_tweets(request):
     all_tweets = Tweet.objects.all().order_by('-id')
+    if request.GET.get('tweet_type')=="any":
+        pass
     page = request.GET.get('page')    
     paginator = Paginator(all_tweets, 2)  # Adjust per_page as needed
     try:
@@ -134,8 +136,8 @@ def add_tweet(request):
     else:
         reposting = None
 
-    if reposting==None and request.POST.get('message')=="":
-        messages.warning(request, "Message can't be empty")
+    if reposting==None and request.POST.get('message')=="" and not request.FILES:
+        messages.warning(request, "Message cannot be empty")
     else:
         tweet = Tweet.objects.create(
             user = request.user,
@@ -145,9 +147,13 @@ def add_tweet(request):
             repost_tweet = reposting,
             
         )
-        print(request.FILES.getlist('files'),'ffffffffffff')
-        for i in request.FILES.getlist('files'):
-            tweet.tweet_media.add(T_Media.objects.create(file_name=i))
+        if 'files' in request.FILES:
+            files = request.FILES.getlist('files')
+            if files:
+                tweet.tweet_type = 1
+                tweet.save()
+                for i in request.FILES.getlist('files'):
+                    tweet.tweet_media.add(T_Media.objects.create(file_name=i))
         messages.success(request, "Tweet uploaded")
     return redirect(request.META.get('HTTP_REFERER', reverse('home')))
 

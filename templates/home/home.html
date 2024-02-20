@@ -160,13 +160,12 @@
 
 <script>
 	function start_load_tweets() {
-		console.log(loading);
 		page = 2;
 		var type = $('#load_tweet_type').val();
 		$.ajax({
 			url: 'user/load-more-tweets/',
 			type: 'GET',
-			data: {'page': 1, 'type':type},
+			data: {'page': 1, 'tweet_type':type},
 			success: function(data) {
 				if (data.tweets_html) {
 					if(type=='any'){

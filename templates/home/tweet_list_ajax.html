@@ -26,11 +26,15 @@
                 </ul>
             </div>
             {% if tweet.tweet_type == 1 %}
-            <figure>
-                <a href="blog-post.html"><img src="{% static 'img/blog-1.jpg' %}" alt="">
-                    <div class="preview"><span>Read more</span></div>
-                </a>
-            </figure>
+            
+                {% for m_file in tweet.tweet_media.all %}
+                <figure>
+                    <a href="{{ m_file.file_name.url }}" target="_blank">
+                        <img src="{{ m_file.file_name.url }}" alt="">
+                        <!-- <div class="preview"><span>Read more</span></div> -->
+                    </a>
+                </figure>
+                {% endfor %}
             {% endif %}
             <div class="post_info">
                 <ul>                    
