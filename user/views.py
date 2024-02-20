@@ -162,18 +162,18 @@ def add_tweet(request):
 from django.urls import reverse
 @login_required
 def follow_user(request, follow_to):
-    already_follow = Following.objects.filter(
-        following_to=follow_to,
-        main_user=request.user
-    )
-    messages.info(request, "Already Following")
-    if not already_follow:
-        new_following = Following.objects.create(
-            following_to=follow_to,
-            main_user=request.user
-        )
-        new_following.save()
-        messages.info(request, "Following Successfully")
+    # already_follow = Following.objects.filter(
+    #     following_to=follow_to,
+    #     main_user=request.user
+    # )
+    # messages.info(request, "Already Following")
+    # if not already_follow:
+    #     new_following = Following.objects.create(
+    #         following_to=follow_to,
+    #         main_user=request.user
+    #     )
+    #     new_following.save()
+    #     messages.info(request, "Following Successfully")
 
     return redirect(request.META.get('HTTP_REFERER', reverse('home')))
 

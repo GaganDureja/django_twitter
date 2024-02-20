@@ -12,6 +12,7 @@ class User(AbstractUser):
     verified_account = models.BooleanField(default=False)
     profile_imgg = models.FileField(upload_to="profile", null=True, blank=True)
     bg_imgg = models.FileField(upload_to="profile", null=True, blank=True)
+    followers = models.ManyToManyField('self')
 
 
 class T_Media(models.Model):
@@ -100,8 +101,8 @@ class Tweet(models.Model):
 
 
 
-class Following(models.Model):
-    main_user = models.ForeignKey(User, related_name='following_set', on_delete=models.CASCADE)
-    following_to = models.ForeignKey(User, related_name='follower_set', on_delete=models.CASCADE)
+# class Following(models.Model):
+#     main_user = models.ForeignKey(User, related_name='following_set', on_delete=models.CASCADE)
+#     following_to = models.ForeignKey(User, related_name='follower_set', on_delete=models.CASCADE)
 
 

@@ -189,6 +189,9 @@
 										<div class="info-container" style="float:left;">
 											<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">{{ random_user.first_name }} {{ random_user.last_name }}</div>
 											<div class="email" style="font-size:10px;">{{ random_user.username }}</div>
+											
+											<a href="{% url 'user:follow_user' random_user.pk %}">Follow</a>
+											
 										</div>
 									</div>
 								</li>

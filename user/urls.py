@@ -13,6 +13,6 @@ urlpatterns = [
     path('logout', views.user_logout, name='Logout'),
     path('load-more-tweets/', views.load_tweets, name='load_more_tweets'),
     path('add-tweet/', views.add_tweet, name='add_tweet'),
-    path('follow/<int:follow_to>', views.follow_user, name="follow_user"),
+    path('follow/<int:follow_to>/', views.follow_user, name="follow_user"),
 
 ]

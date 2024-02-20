@@ -12,6 +12,6 @@ admin.site.register(User)
 
 admin.site.register(T_Media)
 admin.site.register(Tags)
-admin.site.register(Following)
+# admin.site.register(Following)
 
 
