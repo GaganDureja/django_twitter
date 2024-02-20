@@ -114,6 +114,21 @@ def load_tweets(request):
     tweets_html = render_to_string('home/tweet_list_ajax.html', {'tweets': tweets})
     return JsonResponse({'tweets_html': tweets_html})
 
+import re
+def extract_tags_and_mentions(text):
+    # Regular expression patterns for extracting hashtags and mentions
+    hashtag_pattern = r'#\w+'
+    mention_pattern = r'@\w+'
+
+    # Find all hashtags and mentions in the text
+    hashtags = re.findall(hashtag_pattern, text)
+    mentions = re.findall(mention_pattern, text)
+    hashtags = [tag[1:] for tag in hashtags]
+    mentions = [mention[1:] for mention in mentions]
+
+    return hashtags, mentions
+
+
 @login_required
 def add_tweet(request):
    
@@ -138,10 +153,26 @@ def add_tweet(request):
 
     if reposting==None and request.POST.get('message')=="" and not request.FILES:
         messages.warning(request, "Message cannot be empty")
+
     else:
+        if request.POST.get('message'):
+            tweet_message = request.POST.get('message')
+            hashtags, mentions = extract_tags_and_mentions(tweet_message)
+
+            for tag in hashtags:
+                if Tags.objects.filter(name=tag).exists():
+                    tag = Tags.objects.filter(name=tag)
+                    tag.used_times +=1
+                    tag.save()
+                else:                    
+                    Tags.objects.create(name=tag)
+            for mension in mentions:
+                if User.objects.filter(username=mension).exists():
+                    Tweet.mentions.add(mension)
+
         tweet = Tweet.objects.create(
             user = request.user,
-            msg = request.POST.get('message'),
+            msg = tweet_message,
             reply_by = request.POST.get('reply_type'),
             reply_to = reply_to,
             repost_tweet = reposting,
@@ -160,20 +191,25 @@ def add_tweet(request):
 
 
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 @login_required
 def follow_user(request, follow_to):
-    # already_follow = Following.objects.filter(
-    #     following_to=follow_to,
-    #     main_user=request.user
-    # )
-    # messages.info(request, "Already Following")
-    # if not already_follow:
-    #     new_following = Following.objects.create(
-    #         following_to=follow_to,
-    #         main_user=request.user
-    #     )
-    #     new_following.save()
-    #     messages.info(request, "Following Successfully")
-
+    current_user = request.user
+    user_to_follow = get_object_or_404(User, pk=follow_to)    
+    messages.info(request, "Already Following")
+    if not current_user.followers.filter(pk=user_to_follow.pk).exists():
+        current_user.followers.add(user_to_follow)
+        messages.success(request, "Following Successfully")
     return redirect(request.META.get('HTTP_REFERER', reverse('home')))
+ 
 
+
+@login_required
+def unfollow_user(request, unfollow_to):
+    current_user = request.user
+    user_to_unfollow = get_object_or_404(User, pk=unfollow_to)    
+    messages.info(request, "Already not Following")
+    if current_user.followers.filter(pk=user_to_unfollow.pk).exists():
+        current_user.followers.remove(user_to_unfollow)
+        messages.success(request, "Removed from Following")
+    return redirect(request.META.get('HTTP_REFERER', reverse('home')))
