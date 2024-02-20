@@ -152,21 +152,16 @@
 								<h4>What's Happening</h4>
 							</div>
 							<ul class="comments-list">
+								{% for tag in top_tags %}
 								<li>
-									<div class="user-info m-3">
-										<div class="image m-2" style="float:left;">
-											{% if user.profile_imgg %}
-												<img src="assets/images/xs/avatar1.jpg" width="48" height="48" alt="User">
-											{% else %}
-												<div class="circle">{{user.first_name|slice:":1" }}</div>
-											{% endif %}
-										</div>
+									<div class="user-info m-3">										
 										<div class="info-container" style="float:left;">
-											<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">{{ user.first_name }} {{ user.last_name }}</div>
-											<div class="email" style="font-size:10px;">{{ user.username }}</div>
+											<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">#{{ tag.name }}</div>
+											<div class="email" style="font-size:10px;">{{ tag.used_times }} posts</div>
 										</div>
 									</div>
 								</li>
+								{% endfor %}
 								
 							</ul>
 						</div>

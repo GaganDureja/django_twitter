@@ -99,9 +99,13 @@ from django.template.loader import render_to_string
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def load_tweets(request):
+
+    following_users = request.user.followers.all()
     all_tweets = Tweet.objects.all().order_by('-id')
     if request.GET.get('tweet_type')=="any":
-        pass
+        all_tweets = Tweet.objects.all().order_by('-id')
+    else:
+        all_tweets = Tweet.objects.filter(user__in=following_users).order_by('-id')
     page = request.GET.get('page')    
     paginator = Paginator(all_tweets, 2)  # Adjust per_page as needed
     try:
@@ -131,15 +135,6 @@ def extract_tags_and_mentions(text):
 
 @login_required
 def add_tweet(request):
-   
-    # tweet_type = 0,
-    # if request.POST.get('files[]'):
-    #     tweet_type = 1
-
-    user_mentions = ""
-    tags_used = ""
-    # mentions = user_mentions,
-    # tweet_tags = tags_used
 
     if request.POST.get('reply_to'):
         reply_to = request.POST.get('reply_to')
@@ -161,14 +156,12 @@ def add_tweet(request):
 
             for tag in hashtags:
                 if Tags.objects.filter(name=tag).exists():
-                    tag = Tags.objects.filter(name=tag)
+                    tag = Tags.objects.filter(name=tag).first()
                     tag.used_times +=1
                     tag.save()
                 else:                    
                     Tags.objects.create(name=tag)
-            for mension in mentions:
-                if User.objects.filter(username=mension).exists():
-                    Tweet.mentions.add(mension)
+            
 
         tweet = Tweet.objects.create(
             user = request.user,
@@ -178,6 +171,10 @@ def add_tweet(request):
             repost_tweet = reposting,
             
         )
+        for mension in mentions:
+                mension_user = User.objects.filter(username=mension)
+                if mension_user.exists():
+                    tweet.mentions.add(mension_user.first())
         if 'files' in request.FILES:
             files = request.FILES.getlist('files')
             if files:
@@ -213,3 +210,6 @@ def unfollow_user(request, unfollow_to):
         current_user.followers.remove(user_to_unfollow)
         messages.success(request, "Removed from Following")
     return redirect(request.META.get('HTTP_REFERER', reverse('home')))
+
+
+

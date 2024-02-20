@@ -10,3 +10,7 @@ def random_user_ids(request):
     else:
         random_user_ids = []  # Or any default value you prefer
     return {'random_user_ids': random_user_ids}
+
+def top_tags(request):
+    top_tags = Tags.objects.all().order_by('used_times')[:5]
+    return {'top_tags': top_tags}

@@ -131,7 +131,7 @@
 						$.ajax({
 							url: 'user/load-more-tweets/',
 							type: 'GET',
-							data: {'page': page, 'type':type},
+							data: {'page': page, 'tweet_type':type},
 							success: function(data) {
 								if (data.tweets_html) {
 									if(type=='any'){
