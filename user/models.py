@@ -12,7 +12,7 @@ class User(AbstractUser):
     verified_account = models.BooleanField(default=False)
     profile_imgg = models.FileField(upload_to="profile", null=True, blank=True)
     bg_imgg = models.FileField(upload_to="profile", null=True, blank=True)
-    followers = models.ManyToManyField('self')
+    followers = models.ManyToManyField('user.User')
     bookmarks = models.ManyToManyField('Tweet', related_name='my_bookmarks')
     header_photo = models.FileField(upload_to="profile", null=True, blank=True)
     photo = models.FileField(upload_to="profile", null=True, blank=True)
@@ -24,12 +24,12 @@ class T_Media(models.Model):
 
 class Tags(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    used_times = models.IntegerField(default=0)
+    used_times = models.IntegerField(default=1)
     created_on = models.DateTimeField(auto_now_add=True)
 
 class Tweet(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    msg = models.CharField(max_length=500, null=True)
+    msg = models.CharField(max_length=10000, null=True)
 
     TWEET_TYPES = (
         (0, 'Message'),

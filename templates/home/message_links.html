@@ -1,0 +1,5 @@
+{% if hashtag %}
+    <a href="{% url 'search' %}">#{{hashtag}}</a>
+{% elif mention %}
+    <a href="{% url 'user_page' mention %}">@{{mention}}</a>
+{% endif %}

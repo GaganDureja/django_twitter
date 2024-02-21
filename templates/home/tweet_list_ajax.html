@@ -1,5 +1,6 @@
 
 {% load static %}
+{% load custom_filters %}
 
 {% for tweet in tweets %}
 
@@ -21,7 +22,12 @@
                             <b class="text-black"> {{ tweet.user.first_name }}</b>
                             @{{ tweet.user.username }} . {{ tweet.created_on }}
                         </a>
-                        <br> {{ tweet.msg }}
+                        <br>
+                        <div>
+                            {{ tweet.msg|message_links|safe }}
+                               
+                        </div>
+
                     </li>
                     <li><i class="ti-more"></i></li>
                 </ul>

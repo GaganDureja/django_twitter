@@ -30,7 +30,7 @@ def signup(request):
             
             User.objects.create(
                 password = make_password(request.POST.get('password')),
-                username= request.POST.get('email'),
+                username = request.POST.get('name'),
                 first_name = request.POST.get('name'),
                 email=request.POST.get('email')
             )
@@ -171,10 +171,10 @@ def add_tweet(request):
             repost_tweet = reposting,
             
         )
-        for mension in mentions:
-                mension_user = User.objects.filter(username=mension)
-                if mension_user.exists():
-                    tweet.mentions.add(mension_user.first())
+        for mention in mentions:
+                mention_user = User.objects.filter(username=mention)
+                if mention_user.exists():
+                    tweet.mentions.add(mention_user.first())
         if 'files' in request.FILES:
             files = request.FILES.getlist('files')
             if files:
@@ -193,10 +193,13 @@ from django.shortcuts import get_object_or_404
 def follow_user(request, follow_to):
     current_user = request.user
     user_to_follow = get_object_or_404(User, pk=follow_to)    
+
     messages.info(request, "Already Following")
+
     if not current_user.followers.filter(pk=user_to_follow.pk).exists():
         current_user.followers.add(user_to_follow)
         messages.success(request, "Following Successfully")
+
     return redirect(request.META.get('HTTP_REFERER', reverse('home')))
  
 
@@ -227,4 +230,11 @@ def bookmark(request, tweet_id):
 def user_page(request, username):
     user_det = get_object_or_404(User, username=username)
     total_tweets = Tweet.objects.filter(user=user_det.id).count()
-    return render(request,'user/profile.html', {'user_det':user_det, 'total_tweets':total_tweets})
+    number_of_followers = User.objects.filter(followers=user_det.id).count()
+    print(number_of_followers)
+    return render(request,'user/profile.html', {'user_det':user_det, 'total_tweets':total_tweets, 'number_of_followers':number_of_followers})
+
+
+def search(request, q=None):
+    pass
+
