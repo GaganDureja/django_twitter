@@ -28,13 +28,13 @@ urlpatterns = [
     # path('', TemplateView.as_view(template_name='home/index.html'), name='index'),
     path('', check_login , name='index'),
     path('home', home, name='home'),
-    path('status/<int:tweet_id>', tweet_details, name='tweet_details'),
+    path('status/<int:tweet_id>/', tweet_details, name='tweet_details'),
     path('user/', include('user.urls')),
     path('search/', search, name='search'),
     path('notification/', notification, name='notification'),
     path('message/', message, name='message'),
     path('bookmark/', bookmark, name='bookmark'),
-    path('<str:username>', user_page, name='user_page'),
+    path('<str:username>/', user_page, name='user_page'),
     path('admin/', admin.site.urls),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -52,6 +52,9 @@
 <body>
 
 	<style>
+		a{
+			color:#000;
+		}
 		.side_menu li a{
 			text-transform: none;
 			display: block;
@@ -112,13 +115,14 @@
 							<ul class="side_menu" style="display: block;">
 								<li><a href="{% url 'home' %}" ><span class="ti-home"></span> Home</a></li>
 								<li><a href="{% url 'search' %}"><span class="ti-search"></span> Explore</a></li>
-								<li><a href="#0"><span class="ti-bell"></span> Notifications</a></li>
-								<li><a href="#0"><span class="ti-email"></span> Messages</a></li>
-								<li><a href="#0"><span class="ti-blackboard"></span> Grok</a></li>
-								<li><a href="#0"><span class="ti-file"></span> Lists</a></li>
-								<li><a href="#0"><span class="ti-user"></span> Profile</a></li>
-								<li><a href="#0"><span class="ti-more-alt"></span> More</a></li>
-								<li><a href="#0" class="btn_1 full-width">Post</a></li>	
+								<li><a href="{% url 'notification' %}"><span class="ti-bell"></span> Notifications</a></li>
+								<li><a href="{% url 'message' %}"><span class="ti-email"></span> Messages</a></li>
+								<!-- <li><a href="#"><span class="ti-blackboard"></span> Grok</a></li> -->
+								<!-- <li><a href="#0"><span class="ti-file"></span> Lists</a></li> -->
+								<li><a href="{% url 'user_page' request.user %}"><span class="ti-user"></span> Profile</a></li>
+								<li><a href="{% url 'bookmark' %}"><span class="ti-bookmark"></span> Bookmarks</a></li>
+								<!-- <li><a href="#0"><span class="ti-more-alt"></span> More</a></li> -->
+								<!-- <li><a href="#" class="btn_1 full-width">Post</a></li>	 -->
 
 
 								<li>
@@ -169,12 +173,14 @@
 							<ul class="comments-list">
 								{% for tag in top_tags %}
 								<li>
-									<div class="user-info m-3">										
-										<div class="info-container" style="float:left;">
-											<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">#{{ tag.name }}</div>
-											<div class="email" style="font-size:10px;">{{ tag.used_times|short_number }} posts</div>
+									<a href="{% url 'search' %}?q=#{{ tag.name }}">
+										<div class="user-info m-3">										
+											<div class="info-container" style="float:left;">
+												<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">#{{ tag.name }}</div>
+												<div class="email" style="font-size:10px;">{{ tag.used_times|short_number }} posts</div>
+											</div>
 										</div>
-									</div>
+									</a>
 								</li>
 								{% endfor %}
 								
@@ -188,22 +194,24 @@
 							<ul class="comments-list">
 								{% for random_user in random_user_ids %}
 								<li>
-									<div class="user-info m-3">
-										<div class="image m-2" style="float:left;">
-											{% if random_user.profile_imgg %}
-												<img src="assets/images/xs/avatar1.jpg" width="48" height="48" alt="User">
-											{% else %}
-												<div class="circle">{{random_user.first_name|slice:":1" }}</div>
-											{% endif %}
+									<a href="{% url 'user_page' random_user.username %}">
+										<div class="user-info m-3">
+											<div class="image m-2" style="float:left;">
+												{% if random_user.profile_imgg %}
+													<img src="assets/images/xs/avatar1.jpg" width="48" height="48" alt="User">
+												{% else %}
+													<div class="circle">{{random_user.first_name|slice:":1" }}</div>
+												{% endif %}
+											</div>
+											<div class="info-container" style="float:left;">
+												<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">{{ random_user.first_name }} {{ random_user.last_name }}</div>
+												<div class="email" style="font-size:10px;">{{ random_user.username }}</div>
+												
+												<a href="{% url 'user:follow_user' random_user.pk %}">Follow</a>
+												
+											</div>
 										</div>
-										<div class="info-container" style="float:left;">
-											<div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">{{ random_user.first_name }} {{ random_user.last_name }}</div>
-											<div class="email" style="font-size:10px;">{{ random_user.username }}</div>
-											
-											<a href="{% url 'user:follow_user' random_user.pk %}">Follow</a>
-											
-										</div>
-									</div>
+									</a>
 								</li>
 								{% endfor %}
 							</ul>

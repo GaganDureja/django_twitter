@@ -131,7 +131,7 @@ def load_tweets(request):
 
 
 def tweet_details(request,tweet_id):
-    tweet_det = get_object_or_404(User, id=tweet_id)
+    tweet_det = get_object_or_404(Tweet, id=tweet_id)
     return render(request,'home/tweet_details.html', {'tweet_det':tweet_det})
 
 
