@@ -30,7 +30,7 @@ urlpatterns = [
     path('home', home, name='home'),
     path('user/', include('user.urls')),
     path('search/', search, name='search'),
-    path('search/<str:q>', search, name='search_key'),
+    # path('search/<str:q>', search, name='search_key'),
     path('<str:username>', user_page, name='user_page'),
     path('admin/', admin.site.urls),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

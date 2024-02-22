@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
-
+import random
 def signup(request):    
     if request.user.is_authenticated:
         messages.warning(request, "Already Logged in")
@@ -26,12 +26,16 @@ def signup(request):
                 messages.warning(request, "User already exists with this email")
                 return redirect('index')
 
+            full_name = request.POST.get('name')  
+            user_name = full_name
+            while User.objects.filter(username=user_name).exists():
+                random_number = random.randint(1, 9999)
+                user_name = f"{full_name}{random_number}"
 
-            
             User.objects.create(
                 password = make_password(request.POST.get('password')),
-                username = request.POST.get('name'),
-                first_name = request.POST.get('name'),
+                username = user_name,
+                first_name = full_name,
                 email=request.POST.get('email')
             )
 
@@ -40,6 +44,7 @@ def signup(request):
             return redirect('index')            
             return redirect('users:Signup')
         
+from django.db.models import Q
 
 def signin(request):
     next_url =  request.POST.get('next')
@@ -52,12 +57,18 @@ def signin(request):
             return redirect('index')
             
         if request.method == 'POST':
-            if User.objects.filter(email=request.POST.get('email')):
+
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+
+            if User.objects.filter(Q(email=email) | Q(phone=email) | Q(username=email)):
                 user = authenticate(
-                        request, 
-                        username=request.POST.get('email'), 
-                        password=request.POST.get('password')
+                        request,
+                        username=email,
+                        password=password
                     )
+
+
                 if user:
                     login(request, user)    
                     messages.success(request, "Login success")
@@ -69,7 +80,7 @@ def signin(request):
                     messages.error(request, "Incorrect password!!!")
                 return redirect('index')       
             else:
-                messages.warning(request, "Email not registered")      
+                messages.warning(request, "Account not found")      
                 return redirect('index')       
                 # return render(request,'index')
 
