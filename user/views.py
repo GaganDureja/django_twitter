@@ -242,10 +242,17 @@ def user_page(request, username):
     user_det = get_object_or_404(User, username=username)
     total_tweets = Tweet.objects.filter(user=user_det.id).count()
     number_of_followers = User.objects.filter(followers=user_det.id).count()
-    print(number_of_followers)
     return render(request,'user/profile.html', {'user_det':user_det, 'total_tweets':total_tweets, 'number_of_followers':number_of_followers})
 
 
 def search(request, q=None):
-    pass
+    return render(request,'home/search.html')
 
+def notification(request, q=None):
+    return render(request,'user/notification.html')
+
+def message(request, q=None):
+    return render(request,'user/message.html')
+
+def bookmark(request, q=None):
+    return render(request,'user/bookmark.html')

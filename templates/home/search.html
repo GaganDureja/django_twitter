@@ -1,0 +1,154 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+
+{% block specific_meta %}
+    <meta name="description" content="Twitter">
+    <meta name="keywords" content="Twitter">
+    <meta name="author" content="Twitter">
+    <title>Twitter</title>
+{% endblock %}
+
+
+{% block specific_css %}
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+{% endblock %}
+	
+
+ 
+ 
+
+	 
+	
+	
+
+{% block main_content %}
+
+	<input type="hidden" id="load_tweet_type" value="any">
+	 
+		<ul class="nav nav-tabs" id="tab_checkout" role="tablist">
+			<li class="nav-item m-auto" role="presentation">
+				<a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#tab_1" role="tab" onclick="$('#load_tweet_type').val('any');start_load_tweets()" aria-controls="tab_1" aria-selected="true">For You</a>
+			</li>
+			<li class="nav-item m-auto" role="presentation">
+				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_2" role="tab" onclick="$('#load_tweet_type').val('follow');start_load_tweets()" aria-controls="tab_2" aria-selected="false" tabindex="-1">Following</a>
+			</li>
+		</ul>
+
+
+		<div class="tab-content checkout">
+			<div class="tab-pane fade active show row" id="tab_1" role="tabpanel" aria-labelledby="tab_1">
+
+			</div>
+			<div class="tab-pane fade row" id="tab_2" role="tabpanel" aria-labelledby="tab_2">
+
+			</div>
+		</div>
+	 
+
+	
+	
+{% endblock %}
+
+
+
+
+
+{% block specific_js %}
+
+	<script>
+		var page = 2;
+		var loading = false;
+		$(document).ready(function() {
+			$(window).scroll(function() {				
+				if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+					var type = $('#load_tweet_type').val();	
+					if (!loading) {
+						loading = true;
+						$.ajax({
+							url: 'user/load-more-tweets/',
+							type: 'GET',
+							data: {'page': page, 'tweet_type':type},
+							success: function(data) {
+								if (data.tweets_html) {
+									if(type=='any'){
+										$('#tab_1').append(data.tweets_html);										
+									}else{
+										$('#tab_2').append(data.tweets_html);
+									}
+									page += 1;
+									loading = false;
+								}
+							},
+							error: function(xhr, status, error) {
+								Swal.fire({
+									title: "",
+									text: error,
+									icon: "error",
+								});								
+								loading = false;
+							}
+						});
+					}
+				}
+			});
+		});
+	</script>
+
+<script>
+	function start_load_tweets() {
+		page = 2;
+		var type = $('#load_tweet_type').val();
+		$.ajax({
+			url: 'user/load-more-tweets/',
+			type: 'GET',
+			data: {'page': 1, 'tweet_type':type},
+			success: function(data) {
+				if (data.tweets_html) {
+					if(type=='any'){
+						$('#tab_1').html(data.tweets_html);
+					}else{
+						$('#tab_2').html(data.tweets_html);										
+					}
+					loading = false;
+				}
+			},
+			error: function(xhr, status, error) {
+				Swal.fire({
+					title: "",
+					text: error,
+					icon: "error",
+				});
+			}
+		});
+	}
+	start_load_tweets();
+</script>
+
+<script>
+	function show_reply_type(){
+		$("#reply_type_options").toggle();
+	}
+	function select_reply_by_privacy(str){
+		if(str==1){
+			$("#reply_type").val(1);
+			$("#selected_reply_by").html('<span class="ti-user"> Accounts you follow</span>');
+		}else if(str==2){
+			$("#reply_type").val(2);
+			$("#selected_reply_by").html('<span class="ti-id-badge"> Verified Accounts</span>');
+		}else if(str==3){
+			$("#reply_type").val(3);
+			$("#selected_reply_by").html('<span class="ti-tag"> Only accounts you mention</span>');
+		}else{
+			$("#reply_type").val(0);
+			$("#selected_reply_by").html('<span class="ti-world"> Everyone</span>');
+		}
+		show_reply_type();
+	}
+</script>
+
+		
+{% endblock %}
+		
+</body>
+</html>
