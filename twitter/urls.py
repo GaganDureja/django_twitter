@@ -28,6 +28,7 @@ urlpatterns = [
     # path('', TemplateView.as_view(template_name='home/index.html'), name='index'),
     path('', check_login , name='index'),
     path('home', home, name='home'),
+    path('status/<int:tweet_id>', tweet_details, name='tweet_details'),
     path('user/', include('user.urls')),
     path('search/', search, name='search'),
     path('notification/', notification, name='notification'),

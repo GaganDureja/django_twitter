@@ -129,6 +129,12 @@ def load_tweets(request):
     tweets_html = render_to_string('home/tweet_list_ajax.html', {'tweets': tweets})
     return JsonResponse({'tweets_html': tweets_html})
 
+
+def tweet_details(request,tweet_id):
+    tweet_det = get_object_or_404(User, id=tweet_id)
+    return render(request,'home/tweet_details.html', {'tweet_det':tweet_det})
+
+
 import re
 def extract_tags_and_mentions(text):
     # Regular expression patterns for extracting hashtags and mentions
