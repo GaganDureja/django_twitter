@@ -1,0 +1,165 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+
+{% block specific_meta %}
+    <meta name="description" content="Twitter">
+    <meta name="keywords" content="Twitter">
+    <meta name="author" content="Twitter">
+    <title>Twitter</title>
+{% endblock %}
+
+
+{% block specific_css %}
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+{% endblock %}
+	
+
+ 
+ 
+
+	 
+	
+	
+
+{% block main_content %}
+
+	 
+
+    <div id="tab_1">
+        <div class="col-md-12">
+            <article class="blog">
+                <div class="post_info">
+                    <ul>
+                        <li>
+                            <div class="thumb" style="width: initial; height: initial;">
+                                <a href="{% url 'user_page' tweet_det.user.username %}">
+                                {% if tweet_det.user.profile_imgg %}
+                                    <img src="assets/images/xs/avatar1.jpg" alt="User">
+                                {% else %}
+                                    <div class="circle  ">{{ tweet_det.user.first_name|slice:":1" }}</div>
+                                {% endif %}
+                                </a>
+                            </div>
+                            <a href="{% url 'user_page' tweet_det.user.username %}" class="text-secondary">
+                                <b class="text-black"> {{ tweet_det.user.first_name }}</b>
+                                @{{ tweet_det.user.username }} . {{ tweet_det.created_on }}
+                            </a>
+                            <br>
+                            <div>
+                                {{ tweet_det.msg|message_links|safe }}
+                                   
+                            </div>                             
+    
+                        </li>
+                        <li><i class="ti-more"></i></li>
+                    </ul>
+                </div>
+                {% if tweet_det.tweet_type == 1 %}
+                
+                    {% for m_file in tweet_det.tweet_media.all %}
+                    <figure>
+                        <a href="{{ m_file.file_name.url }}" target="_blank">
+                            <img src="{{ m_file.file_name.url }}" alt="">
+                            <div class="preview"><span>Preview</span></div>
+                        </a>
+                    </figure>
+                    {% endfor %}
+                {% endif %}
+                <div class="post_info">
+                    <ul>                    
+                        <li><i class="ti-comment"></i>{% if tweet_det.total_comments > 0 %} {{ tweet_det.total_comments }} {% endif %} </li>
+                        <li><i class="ti-loop"></i>{% if tweet_det.total_reposts > 0 %}  {{ tweet_det.total_reposts }} {% endif %}</li>
+                        <li><i class="ti-heart"></i>{% if tweet_det.total_likes > 0 %}  {{ tweet_det.total_likes }} {% endif %}</li>
+                        <li><i class="ti-bar-chart"></i>{% if tweet_det.total_views > 0 %}  {{ tweet_det.total_views }} {% endif %}</li>
+                        <li>
+                            <a href="{% url 'user:bookmark' tweet_det.id %}"><i class="ti-bookmark"></i></a>
+                            <i class="ti-share"></i>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+            <!-- /article -->
+        </div>
+        <!-- /col -->
+    </div>
+	 
+	
+	
+{% endblock %}
+
+
+
+
+
+{% block specific_js %}
+
+	<script>
+		var page = 2;
+		var loading = false;
+		$(document).ready(function() {
+			$(window).scroll(function() {				
+				if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+					
+					if (!loading) {
+						loading = true;
+						$.ajax({
+							url: "{% url 'user:load_more_tweets' %}",
+							type: 'GET',
+							data: {'page': page, 'tweet_type':'any'},
+							success: function(data) {
+								if (data.tweets_html) {
+									$('#tab_1').append(data.tweets_html);
+									page += 1;
+									loading = false;
+								}
+							},
+							error: function(xhr, status, error) {
+								Swal.fire({
+									title: "",
+									text: error,
+									icon: "error",
+								});								
+								loading = false;
+							}
+						});
+					}
+				}
+			});
+		});
+	</script>
+
+<script>
+	function start_load_tweets() {
+		page = 2;
+		$.ajax({
+			url: "{% url 'user:load_more_tweets' %}",
+			type: 'GET',
+			data: {'page': 1, 'tweet_type':'any'},
+			success: function(data) {
+				if (data.tweets_html) {
+					$('#tab_1').append(data.tweets_html);
+					loading = false;
+				}
+			},
+			error: function(xhr, status, error) {
+				Swal.fire({
+					title: "",
+					text: error,
+					icon: "error",
+				});
+			}
+		});
+	}
+	start_load_tweets();
+</script>
+
+
+
+
+		
+{% endblock %}
+		
+</body>
+</html>
