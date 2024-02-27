@@ -25,16 +25,17 @@
 {% block main_content %}
 
 	<input type="hidden" id="load_type" value="latest">
+	<input type="hidden" id="load_page" value="2">
 	 
 		<ul class="nav nav-tabs" id="tab_checkout" role="tablist">
 			<li class="nav-item m-auto" role="presentation">
-				<a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#tab_1" role="tab" onclick="$('#load_type').val('latest');dynamic_load()" aria-controls="tab_1" aria-selected="true">Latest</a>
+				<a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#tab_1" role="tab" onclick="$('#load_type').val('latest');$('#load_page').val(2);dynamic_load()" aria-controls="tab_1" aria-selected="true">Latest</a>
 			</li>
 			<li class="nav-item m-auto" role="presentation">
-				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_2" role="tab" onclick="$('#load_type').val('people');dynamic_load()" aria-controls="tab_2" aria-selected="false" tabindex="-1">People</a>
+				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_2" role="tab" onclick="$('#load_type').val('people');$('#load_page').val(2);dynamic_load()" aria-controls="tab_2" aria-selected="false" tabindex="-1">People</a>
 			</li>
 			<li class="nav-item m-auto" role="presentation">
-				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_3" role="tab" onclick="$('#load_type').val('media');dynamic_load()" aria-controls="tab_2" aria-selected="false" tabindex="-1">Media</a>
+				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_3" role="tab" onclick="$('#load_type').val('media');$('#load_page').val(2);dynamic_load()" aria-controls="tab_2" aria-selected="false" tabindex="-1">Media</a>
 			</li>
 		</ul>
 
@@ -69,7 +70,7 @@
 		if (window.location.hash) {
 			search_term = window.location.hash;
 		}
-		var page = 2;
+		// var page = $('#page').val();
 		var loading = false;
 		$(document).ready(function() {
 			$(window).scroll(function() {				
@@ -77,6 +78,7 @@
 					var search_type = $('#load_type').val();
 					if (!loading) {
 						loading = true;
+						page = $('#load_page').val();
 						$.ajax({
 							url: "{% url 'user:load_more' %}",
 							type: 'GET',
@@ -90,7 +92,8 @@
 									}else{
 										$('#tab_1').append(data.return_result_html);
 									}
-									page += 1;
+									// page += 1;
+									$('#load_page').val(Number(page)+1)
 									loading = false;
 								}
 							},
@@ -119,11 +122,11 @@
 			success: function(data) {
 				if (data.return_result_html) {
 					if(search_type=='people'){
-						$('#tab_2').append(data.return_result_html);										
+						$('#tab_2').html(data.return_result_html);										
 					}else if(search_type=='media'){
-						$('#tab_3').append(data.return_result_html);										
+						$('#tab_3').html(data.return_result_html);										
 					}else{
-						$('#tab_1').append(data.return_result_html);
+						$('#tab_1').html(data.return_result_html);
 					}
 					loading = false;
 				}

@@ -149,7 +149,8 @@ def load_more(request, search_term=None):
             Q(username__icontains=search_term)|
             Q(first_name__icontains=search_term)|
             Q(email__icontains=search_term) 
-            ).order_by('-id')
+            ).filter(~Q(username=request.user)).order_by('-id')
+        
     elif search_type=="media":
         # user who uploaded tweet with media
         # all_results = Tweet.objects.filter(Q(msg__icontains=search_term)| Q(user__icontains=search_term) ).order_by('-id')
@@ -181,10 +182,10 @@ def load_more_profile(request, main_profile=None):
     elif load_type=="replies":
         all_results = Tweet.objects.filter(user=main_profile).filter(~Q(reply_to=None)).order_by('-id')
     elif load_type=="media":
-        all_results = Tweet.objects.filter(tweet_type=1).filter(msg__icontains=main_profile).order_by('-id')
+        all_results = Tweet.objects.filter(tweet_type=1).filter(user=main_profile).order_by('-id')
     else:
         load_type=="likes"
-        all_results = Tweet.objects.filter(msg__icontains=main_profile).order_by('-id')
+        all_results = Tweet.objects.filter(likes=main_profile).order_by('-id')
     
     paginator = Paginator(all_results, 2)
     
@@ -194,6 +195,8 @@ def load_more_profile(request, main_profile=None):
         return_result = paginator.page(1)
     except EmptyPage:
         return_result = []
+    
+    print(return_result)
     return_result_html = render_to_string('user/profile_list_ajax.html', {'return_result': return_result, 'load_type':load_type})
     return JsonResponse({'return_result_html': return_result_html})
 
@@ -277,6 +280,9 @@ from django.shortcuts import get_object_or_404
 @login_required
 def follow_user(request, follow_to):
     current_user = request.user
+    if current_user == follow_to:
+        messages.info(request, "Cannot follow to self")
+        return redirect(request.META.get('HTTP_REFERER', reverse('home')))
     user_to_follow = get_object_or_404(User, pk=follow_to)    
 
     messages.info(request, "Already Following")

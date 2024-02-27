@@ -65,19 +65,20 @@
 
 
 		<input type="hidden" id="load_type" value="posts">
+		<input type="hidden" id="load_page" value="2">
 	 
 		<ul class="nav nav-tabs" id="tab_checkout" role="tablist">
 			<li class="nav-item m-auto" role="presentation">
-				<a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#tab_1" role="tab" onclick="$('#load_type').val('posts');dynamic_load()" aria-controls="tab_1" aria-selected="true">Posts</a>
+				<a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#tab_1" role="tab" onclick="$('#load_type').val('posts');$('#load_page').val(2);dynamic_load()" aria-controls="tab_1" aria-selected="true">Posts</a>
 			</li>
 			<li class="nav-item m-auto" role="presentation">
-				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_2" role="tab" onclick="$('#load_type').val('replies');dynamic_load()" aria-controls="tab_2" aria-selected="false" tabindex="-1">Replies</a>
+				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_2" role="tab" onclick="$('#load_type').val('replies');$('#load_page').val(2);dynamic_load()" aria-controls="tab_2" aria-selected="false" tabindex="-1">Replies</a>
 			</li>
 			<li class="nav-item m-auto" role="presentation">
-				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_3" role="tab" onclick="$('#load_type').val('media');dynamic_load()" aria-controls="tab_3" aria-selected="false" tabindex="-1">Media</a>
+				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_3" role="tab" onclick="$('#load_type').val('media');$('#load_page').val(2);dynamic_load()" aria-controls="tab_3" aria-selected="false" tabindex="-1">Media</a>
 			</li>
 			<li class="nav-item m-auto" role="presentation">
-				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_4" role="tab" onclick="$('#load_type').val('likes');dynamic_load()" aria-controls="tab_4" aria-selected="false" tabindex="-1">Likes</a>
+				<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_4" role="tab" onclick="$('#load_type').val('likes');$('#load_page').val(2);dynamic_load()" aria-controls="tab_4" aria-selected="false" tabindex="-1">Likes</a>
 			</li>
 		</ul>
 
@@ -114,7 +115,6 @@
 
 <script>
 	
-	var page = 2;
 	var loading = false;
 	var main_profile = "{{user_det.id}}";
 	$(document).ready(function() {
@@ -123,6 +123,7 @@
 				var load_type = $('#load_type').val();
 				if (!loading) {
 					loading = true;
+					page = $('#load_page').val();
 					$.ajax({
 						url: "{% url 'user:load_more_profile' %}",
 						type: 'GET',
@@ -138,7 +139,7 @@
 								}else{
 									$('#tab_1').append(data.return_result_html);
 								}
-								page += 1;
+								$('#load_page').val(Number(page)+1)
 								loading = false;
 							}
 						},
@@ -168,13 +169,13 @@ function dynamic_load() {
 		success: function(data) {
 			if (data.return_result_html) {
 				if(load_type=='replies'){					
-					$('#tab_2').append(data.return_result_html);										
+					$('#tab_2').html(data.return_result_html);										
 				}else if(load_type=='media'){
-					$('#tab_3').append(data.return_result_html);										
+					$('#tab_3').html(data.return_result_html);										
 				}else if(load_type=='likes'){
-					$('#tab_4').append(data.return_result_html);										
+					$('#tab_4').html(data.return_result_html);										
 				}else{
-					$('#tab_1').append(data.return_result_html);
+					$('#tab_1').html(data.return_result_html);
 				}
 				loading = false;
 			}
