@@ -3,38 +3,6 @@
 {% load custom_filters %}
 
 
-
-{% if search_type == "people" %}
-
-    
-    <ul class="comments-list">
-    {% for search_user in return_result %}
-        <li>
-            <a href="{% url 'user_page' search_user.username %}">
-                <div class="user-info m-3">
-                    <div class="image m-2" style="float:left;">
-                        {% if search_user.profile_imgg %}
-                            <img src="assets/images/xs/avatar1.jpg" width="48" height="48" alt="User">
-                        {% else %}
-                            <div class="circle">{{search_user.first_name|slice:":1" }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="info-container" style="float:left;">
-                        <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">{{ search_user.first_name }} {{ search_user.last_name }}</div>
-                        <div class="email" style="font-size:10px;">{{ search_user.username }}</div>
-                        
-                        <a href="{% url 'user:follow_user' search_user.pk %}">Follow</a>
-                        
-                    </div>
-                </div>
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
-
-   
-
-{% elif search_type == "latest" or  search_type == "media" %}
     {% for tweet in return_result %}
     
         <div class="col-md-12">
@@ -96,5 +64,5 @@
         </div>
         <!-- /col -->
     {% endfor %}
-{% endif %}
+
 

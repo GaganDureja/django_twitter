@@ -134,23 +134,31 @@ def load_tweets(request):
 def load_more(request, search_term=None):
     
     search_term = request.GET.get('q')
-    print(search_term)
+    
     page = request.GET.get('page')  
     search_type = request.GET.get('search_type')
     
     if search_type=="latest":
         # username, msg, media
-        all_results = Tweet.objects.filter(Q(msg__icontains=search_term)| Q(user__icontains=search_term) ).order_by('-id')
+        # all_results = Tweet.objects.filter(Q(msg__icontains=search_term)| Q(user__icontains=search_term) ).order_by('-id')
+        all_results = Tweet.objects.filter(msg__icontains=search_term).order_by('-id')
     elif search_type=="people":
         #username ,name
-        all_results = Tweet.objects.filter(Q(msg__icontains=search_term)| Q(user__icontains=search_term) ).order_by('-id')
+        # all_results = Tweet.objects.filter(Q(msg__icontains=search_term)| Q(user__icontains=search_term) ).order_by('-id')
+        all_results = User.objects.filter(
+            Q(username__icontains=search_term)|
+            Q(first_name__icontains=search_term)|
+            Q(email__icontains=search_term) 
+            ).order_by('-id')
     elif search_type=="media":
         # user who uploaded tweet with media
-        all_results = Tweet.objects.filter(Q(msg__icontains=search_term)| Q(user__icontains=search_term) ).order_by('-id')
+        # all_results = Tweet.objects.filter(Q(msg__icontains=search_term)| Q(user__icontains=search_term) ).order_by('-id')
+        all_results = Tweet.objects.filter(tweet_type=1).filter(msg__icontains=search_term).order_by('-id')
     else:
         # username, msg, media
         search_type=="latest"
-        all_results = Tweet.objects.filter(Q(msg__icontains=search_term)| Q(user__icontains=search_term) ).order_by('-id')
+        # all_results = Tweet.objects.filter(Q(msg__icontains=search_term)| Q(user__icontains=search_term) ).order_by('-id')
+        all_results = Tweet.objects.filter(msg__icontains=search_term).order_by('-id')
 
 
     paginator = Paginator(all_results, 2)  # Adjust per_page as needed
@@ -160,8 +168,33 @@ def load_more(request, search_term=None):
         return_result = paginator.page(1)
     except EmptyPage:
         return_result = []
-    
     return_result_html = render_to_string('home/search_list_ajax.html', {'return_result': return_result, 'search_type':search_type})
+    return JsonResponse({'return_result_html': return_result_html})
+
+
+def load_more_profile(request, main_profile=None):
+    page = request.GET.get('page')  
+    load_type = request.GET.get('load_type')
+    main_profile = request.GET.get('main_profile')
+    if load_type=="posts":
+        all_results = Tweet.objects.filter(user=main_profile).order_by('-id')
+    elif load_type=="replies":
+        all_results = Tweet.objects.filter(user=main_profile).filter(~Q(reply_to=None)).order_by('-id')
+    elif load_type=="media":
+        all_results = Tweet.objects.filter(tweet_type=1).filter(msg__icontains=main_profile).order_by('-id')
+    else:
+        load_type=="likes"
+        all_results = Tweet.objects.filter(msg__icontains=main_profile).order_by('-id')
+    
+    paginator = Paginator(all_results, 2)
+    
+    try:
+        return_result = paginator.page(page)
+    except PageNotAnInteger:
+        return_result = paginator.page(1)
+    except EmptyPage:
+        return_result = []
+    return_result_html = render_to_string('user/profile_list_ajax.html', {'return_result': return_result, 'load_type':load_type})
     return JsonResponse({'return_result_html': return_result_html})
 
 

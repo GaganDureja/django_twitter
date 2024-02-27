@@ -82,13 +82,13 @@
 							type: 'GET',
 							data: {'page': page, 'search_type':search_type, 'q':search_term},
 							success: function(data) {
-								if (data.tweets_html) {
+								if (data.return_result_html) {
 									if(search_type=='people'){
-										$('#tab_2').append(data.tweets_html);										
+										$('#tab_2').append(data.return_result_html);										
 									}else if(search_type=='media'){
-										$('#tab_3').append(data.tweets_html);										
+										$('#tab_3').append(data.return_result_html);										
 									}else{
-										$('#tab_1').append(data.tweets_html);
+										$('#tab_1').append(data.return_result_html);
 									}
 									page += 1;
 									loading = false;
@@ -117,13 +117,13 @@
 			type: 'GET',
 			data: {'page': 1, 'search_type':search_type, 'q':search_term},
 			success: function(data) {
-				if (data.tweets_html) {
+				if (data.return_result_html) {
 					if(search_type=='people'){
-						$('#tab_2').append(data.tweets_html);										
+						$('#tab_2').append(data.return_result_html);										
 					}else if(search_type=='media'){
-						$('#tab_3').append(data.tweets_html);										
+						$('#tab_3').append(data.return_result_html);										
 					}else{
-						$('#tab_1').append(data.tweets_html);
+						$('#tab_1').append(data.return_result_html);
 					}
 					loading = false;
 				}

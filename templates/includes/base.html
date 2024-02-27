@@ -77,8 +77,8 @@
    	 		text-align: center;
 		}
 		.profile_div{
-			position: relative;
-			top: -20%;			
+			/* position: relative; */
+			top: -10%;			
 			z-index: 99;
 		}
 		.profile_imgg {
@@ -157,12 +157,14 @@
 				
 
 					<aside class="col-lg-3">
+						<form method="get" action="{% url 'search' %}">
 						<div class="widget search_blog d-none d-sm-none d-md-none d-lg-block">
 							<div class="form-group">
-								<input type="text" name="search" id="search_blog" class="form-control" placeholder="Search..">
+								<input type="text" name="q" id="search_blog" class="form-control" placeholder="Search..">
 								<button type="submit"><i class="ti-search"></i></button>
 							</div>
 						</div>
+						</form>
 						<!-- /widget -->
 						<div class="widget">
 							<div class="widget-title">
