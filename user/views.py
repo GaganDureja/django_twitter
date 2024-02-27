@@ -320,6 +320,16 @@ def save_bookmark(request):
         fill = 1
     return JsonResponse({'status': 200, 'message':msg, 'fill':fill})
 
+@login_required
+def save_view(request):
+    tweet_id = request.GET.get('tweet_id')
+    current_user = request.user
+    tweet_id = get_object_or_404(Tweet, pk=tweet_id)
+    tweet_id.views.add(current_user)
+    tweet_id.total_views+=1
+    tweet_id.save()
+    return JsonResponse({'status': 200})
+
     
 def user_page(request, username):
     user_det = get_object_or_404(User, username=username)

@@ -20,6 +20,8 @@ urlpatterns = [
     path('bookmark/', views.bookmark, name="bookmark"),
     path('save-bookmark/', views.save_bookmark, name="save_bookmark"),
     path('load-more-bookmark/', views.load_more_bookmarks, name="load_more_bookmarks"),
+    path('save-view/', views.save_view, name="save_view"),
+
     
 
 ]

@@ -74,7 +74,7 @@
                         <li><i class="ti-heart"></i>{% if tweet_det.total_likes > 0 %}  {{ tweet_det.total_likes }} {% endif %}</li>
                         <li><i class="ti-bar-chart"></i>{% if tweet_det.total_views > 0 %}  {{ tweet_det.total_views }} {% endif %}</li>
                         <li>
-                            <a href="{% url 'user:bookmark' tweet_det.id %}"><i class="ti-bookmark"></i></a>
+                            <a href="javascript:void(0)" onclick='save_book("{{tweet.id}}",this)'><i class="ti-bookmark"></i></a>
                             <i class="ti-share"></i>
                         </li>
                     </ul>
@@ -153,6 +153,33 @@
 		});
 	}
 	start_load_tweets();
+    
+</script>
+
+<script>
+    // add view
+    $(document).ready(function() {
+        $.ajax({
+            url: "{% url 'user:save_view' %}",
+            type: 'GET',
+            data: {"tweet_id":"{{tweet_det.id}}"},
+            success: function(data) {
+                Swal.fire({
+                    title: "",
+                    text: "View increased",
+                    icon: "success",
+                });	
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    title: "",
+                    text: error,
+                    icon: "error",
+                });								
+                loading = false;
+            }
+        });
+		});
 </script>
 
 
