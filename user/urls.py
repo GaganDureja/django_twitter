@@ -17,6 +17,9 @@ urlpatterns = [
     path('add-tweet/', views.add_tweet, name='add_tweet'),
     path('follow/<int:follow_to>/', views.follow_user, name="follow_user"),
     path('unfollow/<int:unfollow_to>/', views.unfollow_user, name="unfollow_user"),
-    path('bookmark/<int:tweet_id>/', views.bookmark, name="bookmark"),
+    path('bookmark/', views.bookmark, name="bookmark"),
+    path('save-bookmark/', views.save_bookmark, name="save_bookmark"),
+    path('load-more-bookmark/', views.load_more_bookmarks, name="load_more_bookmarks"),
+    
 
 ]

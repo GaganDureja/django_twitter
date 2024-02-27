@@ -259,7 +259,39 @@
 		{% endfor %}
 	{% endif %}
 
+	
 
+	<!-- bookmark -->
+	<script>
+		function save_book(str, evt){
+			$.ajax({
+				url: "{% url 'user:save_bookmark' %}",
+				type: 'GET',
+				data: {"tweet_id":str},
+				success: function(data) {					
+					if (data.fill) {
+						// add color
+						$(evt).html('<i class="ti-bookmark-alt"></i>')
+					}else{
+						// remove color
+						$(evt).html('<i class="ti-bookmark"></i>')
+					}
+					Swal.fire({
+						title: "",
+						text: data.message,
+						icon: "success",
+					});
+				},
+				error: function(xhr, status, error) {
+					Swal.fire({
+						title: "",
+						text: error,
+						icon: "error",
+					});
+				}
+			});
+		}
+	</script>
 
 	<script>
 		function check_media_upload(str){

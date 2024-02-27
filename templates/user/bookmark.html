@@ -1,0 +1,109 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block specific_meta %}
+    <meta name="description" content="Twitter">
+    <meta name="keywords" content="Twitter">
+    <meta name="author" content="Twitter">
+    <title>Twitter</title>
+{% endblock %}
+
+
+{% block specific_css %}
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+{% endblock %}
+	
+
+ 
+ 
+
+	 
+	
+	
+
+{% block main_content %}
+
+    
+    
+    <div class="profile_div">
+		<div class="tab-content checkout">
+			<div class="tab-pane fade active show row" id="tab_1" role="tabpanel" aria-labelledby="tab_1">
+
+			</div>
+		</div>
+    </div>
+	
+
+    
+	
+{% endblock %}
+
+
+
+
+
+{% block specific_js %}
+
+<script>	
+	var loading = false;	
+    var page = 2;
+	$(document).ready(function() {
+		$(window).scroll(function() {				
+			if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+				if (!loading) {
+					loading = true;
+					$.ajax({
+						url: "{% url 'user:load_more_bookmarks' %}",
+						type: 'GET',
+						data: {'page': page},
+						success: function(data) {
+							if (data.return_result_html) {
+                                $('#tab_1').append(data.return_result_html);
+								page+=1
+								loading = false;
+							}
+						},
+						error: function(xhr, status, error) {
+							Swal.fire({
+								title: "",
+								text: error,
+								icon: "error",
+							});								
+							loading = false;
+						}
+					});
+				}
+			}
+		});
+	});
+</script>
+
+<script>
+function dynamic_load() {	
+	$.ajax({
+		url: "{% url 'user:load_more_bookmarks' %}",
+		type: 'GET',
+		data: {'page': 1},
+		success: function(data) {
+			if (data.return_result_html) {
+				$('#tab_1').html(data.return_result_html);				
+			}
+		},
+		error: function(xhr, status, error) {
+			Swal.fire({
+				title: "",
+				text: error,
+				icon: "error",
+			});
+		}
+	});
+}
+dynamic_load();
+</script>
+
+		
+{% endblock %}
+		
+</body>
+</html>

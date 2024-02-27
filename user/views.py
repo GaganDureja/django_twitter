@@ -196,7 +196,6 @@ def load_more_profile(request, main_profile=None):
     except EmptyPage:
         return_result = []
     
-    print(return_result)
     return_result_html = render_to_string('user/profile_list_ajax.html', {'return_result': return_result, 'load_type':load_type})
     return JsonResponse({'return_result_html': return_result_html})
 
@@ -305,17 +304,21 @@ def unfollow_user(request, unfollow_to):
         messages.success(request, "Removed from Following")
     return redirect(request.META.get('HTTP_REFERER', reverse('home')))
 
+
 @login_required
-def bookmark(request, tweet_id):
+def save_bookmark(request):
+    tweet_id = request.GET.get('tweet_id')
     current_user = request.user
     tweet_id = get_object_or_404(Tweet, pk=tweet_id)
     if current_user.bookmarks.filter(pk=tweet_id.pk).exists():
         current_user.bookmarks.remove(tweet_id)
-        messages.success(request, "Bookmark removed")
+        msg = "Bookmark removed"
+        fill = 0
     else:
         current_user.bookmarks.add(tweet_id)
-        messages.success(request, "Bookmark added")
-    return redirect(request.META.get('HTTP_REFERER', reverse('home')))
+        msg = "Bookmark added"
+        fill = 1
+    return JsonResponse({'status': 200, 'message':msg, 'fill':fill})
 
     
 def user_page(request, username):
@@ -336,3 +339,19 @@ def message(request, q=None):
 
 def bookmark(request, q=None):
     return render(request,'user/bookmark.html')
+
+def load_more_bookmarks(request):
+    page = request.GET.get('page')  
+   
+    all_results = request.user.bookmarks.all().order_by('-id')
+    paginator = Paginator(all_results, 2)
+    
+    try:
+        tweets = paginator.page(page)
+    except PageNotAnInteger:
+        tweets = paginator.page(1)
+    except EmptyPage:
+        tweets = []
+    
+    return_result_html = render_to_string('home/tweet_list_ajax.html', {'tweets': tweets})
+    return JsonResponse({'return_result_html': return_result_html})

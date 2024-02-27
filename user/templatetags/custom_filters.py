@@ -47,3 +47,9 @@ def message_links(value):
     
     return value
 
+
+@register.filter(name='check_bookmark')
+def check_bookmark(request,tweet_id):
+    if request.user.bookmarks.filter(pk=tweet_id.pk).exists():
+        return True
+    return False
