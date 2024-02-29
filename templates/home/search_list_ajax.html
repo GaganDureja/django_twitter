@@ -86,7 +86,7 @@
                         <li><i class="ti-heart"></i>{% if tweet.total_likes > 0 %}  {{ tweet.total_likes }} {% endif %}</li>
                         <li><i class="ti-bar-chart"></i>{% if tweet.total_views > 0 %}  {{ tweet.total_views }} {% endif %}</li>
                         <li>
-                            <a href="{% url 'user:bookmark' tweet.id %}"><i class="ti-bookmark"></i></a>
+                            <a href="javascript:void(0)" onclick='save_book("{{tweet.id}}",this)'><i class="ti-bookmark"></i></a>
                             <i class="ti-share"></i>
                         </li>
                     </ul>
