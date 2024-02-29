@@ -1,0 +1,1 @@
+This is a basic clone of Twitter. Follow the below steps and test this on your local computer.
