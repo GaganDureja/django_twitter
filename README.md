@@ -20,3 +20,4 @@ Addtion-
 2. It will ask some basic input and after thats done you can start the server again by python3 manage.py runserver
 
 
+<!-- postgresql added -->
