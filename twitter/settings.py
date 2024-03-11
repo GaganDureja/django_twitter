@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # 'rest_framework',
 ]
 
+
 AUTH_USER_MODEL = 'user.User'
 
 MIDDLEWARE = [
@@ -84,18 +85,40 @@ WSGI_APPLICATION = 'twitter.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-import pymysql
-pymysql.install_as_MySQLdb()
+
+
+# mysql db connection code start
+
+# import pymysql
+# pymysql.install_as_MySQLdb()
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'test_twitter',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST':'localhost',
+#         'PORT':'4406',
+#     }
+# }
+
+# mysql db connection code end
+
+
+# postgresql db connection code start
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'test_twitter',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST':'localhost',
-        'PORT':'4406',
+        'USER': 'postgres',
+        'PASSWORD': '123',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
+# postgresql db connection code end
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

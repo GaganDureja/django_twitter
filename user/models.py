@@ -24,13 +24,16 @@ class T_Media(models.Model):
 
 
 class Tags(models.Model):
-    name = models.TextField( max_length=255, db_collation='utf8mb4_unicode_ci', unique=True)
+    # name = models.TextField( max_length=255, db_collation='utf8mb4_unicode_ci', unique=True)
+    name = models.TextField( max_length=255, unique=True)
+
     used_times = models.IntegerField(default=1)
     created_on = models.DateTimeField(auto_now_add=True)
 
 class Tweet(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    msg = models.TextField(db_collation='utf8mb4_unicode_ci', max_length=10000, null=True, blank=True)
+    # msg = models.TextField(db_collation='utf8mb4_unicode_ci', max_length=10000, null=True, blank=True)
+    msg = models.TextField(max_length=10000, null=True, blank=True)
 
     TWEET_TYPES = (
         (0, 'Message'),
